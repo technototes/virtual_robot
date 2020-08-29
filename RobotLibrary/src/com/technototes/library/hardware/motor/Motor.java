@@ -17,6 +17,11 @@ public class Motor<T extends DcMotorSimple> extends HardwareDevice<T> implements
         super(m.getDevice());
     }
 
+    public Motor(String s) {
+        super(s);
+    }
+
+
     @Override
     public boolean getInverted() {
         return device.getDirection() == DcMotorSimple.Direction.FORWARD;

@@ -24,6 +24,10 @@ public class EncodedMotor<T extends DcMotor> extends Motor<T> implements Sensore
         super(m.getDevice());
     }
 
+    public EncodedMotor(String s) {
+        super(s);
+    }
+
     @Override
     public EncodedMotor setInverted(boolean val) {
         device.setDirection(val ? DcMotorSimple.Direction.FORWARD : DcMotorSimple.Direction.REVERSE);

@@ -57,28 +57,28 @@ public class Hardware extends HardwareBase {
     public Hardware(HardwareMap map){
         hardwareMap = map;
 
-        slide = new Motor<CRServo>(hardwareMap.get(CRServo.class, "slide"));
-        turn = new Servo(hardwareMap.get(com.qualcomm.robotcore.hardware.Servo.class, "grabTurn"));
-        claw = new Servo(hardwareMap.get(com.qualcomm.robotcore.hardware.Servo.class, "claw")).setRange(0, 0.7);
+        slide = new Motor<CRServo>("slide");
+        turn = new Servo("grabTurn");
+        claw = new Servo("claw").setRange(0, 0.7);
 
-        cap = new Motor<CRServo>(hardwareMap.get(CRServo.class, "cap"));
+        cap = new Motor<CRServo>("cap");
 
-        blockFlipper = new Servo(hardwareMap.get(com.qualcomm.robotcore.hardware.Servo.class, "blockFlipper"));
+        blockFlipper = new Servo("blockFlipper");
 
         sensorColorBottom = hardwareMap.get(ColorSensor.class, "sensorColorBottom");
 
-        sensorRangeFront = new RangeSensor(hardwareMap.get(DistanceSensor.class, "sensorRangeFront"));
-        sensorRangeRear = new RangeSensor(hardwareMap.get(DistanceSensor.class, "sensorRangeRear"));
-        sensorRangeLeft = new RangeSensor(hardwareMap.get(DistanceSensor.class, "sensorRangeLeft"));
-        sensorRangeRight = new RangeSensor(hardwareMap.get(DistanceSensor.class, "sensorRangeRight"));
+        sensorRangeFront = new RangeSensor("sensorRangeFront");
+        sensorRangeRear = new RangeSensor("sensorRangeRear");
+        sensorRangeLeft = new RangeSensor("sensorRangeLeft");
+        sensorRangeRight = new RangeSensor("sensorRangeRight");
 
-        lLiftMotor = new EncodedMotor<DcMotor>(hardwareMap.get(DcMotor.class, "motorLiftLeft")).setInverted(false);
-        rLiftMotor = new EncodedMotor<DcMotor>(hardwareMap.get(DcMotor.class, "motorLiftRight")).setInverted(true);
+        lLiftMotor = new EncodedMotor<DcMotor>("motorLiftLeft").setInverted(false);
+        rLiftMotor = new EncodedMotor<DcMotor>("motorLiftRight").setInverted(true);
 
-        flMotor = new Motor<DcMotor>(hardwareMap.get(DcMotor.class, "motorFrontLeft"));
-        frMotor = new Motor<DcMotor>(hardwareMap.get(DcMotor.class, "motorFrontRight"));
-        rlMotor = new Motor<DcMotor>(hardwareMap.get(DcMotor.class, "motorRearLeft"));
-        rrMotor = new Motor<DcMotor>(hardwareMap.get(DcMotor.class, "motorRearRight"));
+        flMotor = new Motor<DcMotor>("motorFrontLeft");
+        frMotor = new Motor<DcMotor>("motorFrontRight");
+        rlMotor = new Motor<DcMotor>("motorRearLeft");
+        rrMotor = new Motor<DcMotor>("motorRearRight");
 
         BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
         parameters.angleUnit = BNO055IMU.AngleUnit.DEGREES;

@@ -8,6 +8,11 @@ public class AnalogSensor extends Sensor<AnalogInput> {
         super(d);
     }
 
+    public AnalogSensor(String s) {
+        super(s);
+    }
+
+
     @Override
     public double getSensorValue() {
         return device.getMaxVoltage();

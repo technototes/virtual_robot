@@ -19,6 +19,11 @@ public class Servo extends HardwareDevice<com.qualcomm.robotcore.hardware.Servo>
         super(d);
     }
 
+    public Servo(String s) {
+        super(s);
+    }
+
+
     public Servo setStartingPosition(double pos){
         device.setPosition(pos);
         return this;

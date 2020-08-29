@@ -7,6 +7,11 @@ public class DigitalSensor extends Sensor<DigitalChannel> {
         super(d);
     }
 
+    public DigitalSensor(String s) {
+        super(s);
+    }
+
+
     @Override
     public double getSensorValue() {
         return device.getState() ? 1 : 0;

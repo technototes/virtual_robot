@@ -10,6 +10,11 @@ public class RangeSensor extends Sensor<com.qualcomm.robotcore.hardware.Distance
         super(d);
     }
 
+    public RangeSensor(String s) {
+        super(s);
+    }
+
+
     @Override
     public double getSensorValue() {
         return device.getDistance(distanceUnit);

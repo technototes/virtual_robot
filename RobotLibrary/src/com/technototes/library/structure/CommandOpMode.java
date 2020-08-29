@@ -3,6 +3,7 @@ package com.technototes.library.structure;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.technototes.library.command.CommandScheduler;
+import com.technototes.library.hardware.HardwareDevice;
 
 public abstract class CommandOpMode extends LinearOpMode {
     public static double commandTimeAtEnd = 5;
@@ -15,6 +16,7 @@ public abstract class CommandOpMode extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
+        HardwareDevice.hardwareMap = hardwareMap;
         beginInit();
         while (!isStarted()) {
             beginLoop();
