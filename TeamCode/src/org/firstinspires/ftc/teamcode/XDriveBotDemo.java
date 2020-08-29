@@ -77,7 +77,7 @@ public class XDriveBotDemo extends LinearOpMode {
             m2.setPower(p2);
             m3.setPower(p3);
             m4.setPower(p4);
-            double psrv = -gamepad2.left_stick_y;
+            double psrv = -gamepad1.left_trigger;
             if (Math.abs(psrv) < 0.05) psrv = 0.0;
             backServo.setPower(psrv);
             telemetry.addData("Color","R %d  G %d  B %d", colorSensor.red(), colorSensor.green(), colorSensor.blue());

@@ -63,6 +63,7 @@ public interface Telemetry {
      */
     public void addData(String caption, Object data);
 
+    public void addLine(String line);
     /**
      * Clear the telemetry display, then write any data that has been added since the previous update.
      */
