@@ -38,10 +38,11 @@ package com.qualcomm.robotcore.hardware;
  *
  * @see DcMotorEx#setPIDFCoefficients(DcMotor.RunMode, PIDFCoefficients)
  */
-public enum MotorControlAlgorithm
-{
+public enum MotorControlAlgorithm {
     Unknown,
-    /** @deprecated Switch to {@link #PIDF} instead*/
+    /**
+     * @deprecated Switch to {@link #PIDF} instead
+     */
     @Deprecated
     LegacyPID,
     PIDF;

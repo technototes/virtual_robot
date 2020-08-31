@@ -21,8 +21,9 @@ public abstract class OmnidirectionalDrivebaseSubsystem<T extends Motor> extends
     public abstract void drive(double speed, double angle, double twist);
 
     public void driveFieldCentric(double speed, double x, double y, double twist) {
-        drive(speed,Math.toDegrees(MathUtils.safeATan(y, x)) + gyroSupplier.getAsDouble(), twist);
+        drive(speed, Math.toDegrees(MathUtils.safeATan(y, x)) + gyroSupplier.getAsDouble(), twist);
     }
+
     public void drive(double speed, double x, double y, double twist) {
         drive(speed, Math.toDegrees(MathUtils.safeATan(y, x)), twist);
     }

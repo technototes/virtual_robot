@@ -42,7 +42,7 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * Virtual Robot's implementation of OpMode.
- *
+ * <p>
  * Classes extending OpMode must define the "init" and "loop" methods.
  * Optionally, "init_loop", "start", and "stop" methods may be overridden.
  */
@@ -181,5 +181,7 @@ public abstract class OpMode extends VirtualRobotController.OpModeBase {
     /**
      * automatically update telemetry in a non-linear opmode
      */
-    public void internalPostLoop() { telemetry.update(); }
+    public void internalPostLoop() {
+        telemetry.update();
+    }
 }

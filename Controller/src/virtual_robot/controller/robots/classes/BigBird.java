@@ -8,7 +8,6 @@ import javafx.fxml.FXML;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Scale;
-import javafx.scene.transform.Translate;
 import virtual_robot.controller.BotConfig;
 import virtual_robot.controller.VirtualBot;
 import virtual_robot.controller.VirtualRobotController;
@@ -17,11 +16,11 @@ import virtual_robot.util.AngleUtils;
 /**
  * For internal use only. Represents a robot with four mechanum wheels, color sensor, four distance sensors,
  * a BNO055IMU, and an extensible arm with a grabber on the end.
- *
+ * <p>
  * The easiest way to create a new robot configuration is to copy and paste the Java class and the FXML file
  * of an existing configuration, then make make modifications. The ArmBot config is a modification of
  * the MechanumBot config.
- *
+ * <p>
  * The @BotConfig annotation is required. The name will be displayed to the user in the Configuration
  * combo box. The filename refers to the fxml file that contains the markup for the graphical UI.
  * Note: the fxml file must be located in the virtual_robot.controller.robots.classes.fxml folder.
@@ -42,7 +41,7 @@ public class BigBird extends VirtualBot {
     DcMotor interface. The drive motors are stored in an array of DcMotorImpl.
      */
     private DcMotorExImpl[] driveMotors = new DcMotorExImpl[4];
-//    private DcMotorExImpl flMotor = null;
+    //    private DcMotorExImpl flMotor = null;
 //    private DcMotorExImpl frMotor = null;
 //    private DcMotorExImpl rlMotor = null;
 //    private DcMotorExImpl rrMotor = null;
@@ -75,13 +74,20 @@ public class BigBird extends VirtualBot {
     fxml file must declare fx:id attributes for the Rectangles that represent the arm, hand, and both fingers.
     For example, the attribute for the arm would be:  fx:id="arm"
      */
-    @FXML private Rectangle lLift;            //The arm. Must be able to extend/retract (i.e., scale) in Y-dimension.
-    @FXML private Rectangle rLift;
-    @FXML private Rectangle grab;
-    @FXML private Rectangle flipper;
-    @FXML private Rectangle upslide;
-    @FXML private Rectangle rotate;
-    @FXML private Rectangle capslide;
+    @FXML
+    private Rectangle lLift;            //The arm. Must be able to extend/retract (i.e., scale) in Y-dimension.
+    @FXML
+    private Rectangle rLift;
+    @FXML
+    private Rectangle grab;
+    @FXML
+    private Rectangle flipper;
+    @FXML
+    private Rectangle upslide;
+    @FXML
+    private Rectangle rotate;
+    @FXML
+    private Rectangle capslide;
 
     /*
     Transform objects that will be instantiated in the initialize() method, and will be used in the
@@ -169,11 +175,11 @@ public class BigBird extends VirtualBot {
         and the corresponding small changes in robot position and orientation in the robot's coordinate system.
         */
         double sqrt2 = Math.sqrt(2);
-        double wheelBaseRadius = botWidth * (1.0/sqrt2 - 5.0/36.0);
-        tWR = new double[][] {
-                {-0.25*sqrt2, 0.25*sqrt2, -0.25*sqrt2, 0.25*sqrt2},
-                {0.25*sqrt2, 0.25*sqrt2, 0.25*sqrt2, 0.25*sqrt2},
-                {-0.25/ wheelBaseRadius, -0.25/ wheelBaseRadius, 0.25/ wheelBaseRadius, 0.25/ wheelBaseRadius},
+        double wheelBaseRadius = botWidth * (1.0 / sqrt2 - 5.0 / 36.0);
+        tWR = new double[][]{
+                {-0.25 * sqrt2, 0.25 * sqrt2, -0.25 * sqrt2, 0.25 * sqrt2},
+                {0.25 * sqrt2, 0.25 * sqrt2, 0.25 * sqrt2, 0.25 * sqrt2},
+                {-0.25 / wheelBaseRadius, -0.25 / wheelBaseRadius, 0.25 / wheelBaseRadius, 0.25 / wheelBaseRadius},
                 {-0.25, 0.25, 0.25, -0.25}
         };
 
@@ -183,11 +189,11 @@ public class BigBird extends VirtualBot {
     }
 
     /**
-     *  The initialize() method is called automatically when the robot's graphical UI is loaded from the
-     *  arm_bot.fxml markup file. It should be used to set up parts of the graphical UI that will change
-     *  as the robot operates
+     * The initialize() method is called automatically when the robot's graphical UI is loaded from the
+     * arm_bot.fxml markup file. It should be used to set up parts of the graphical UI that will change
+     * as the robot operates
      */
-    public void initialize(){
+    public void initialize() {
 
         /*
         Scales the arm with pivot point at center of back of robot (which corresponds to the back of the arm).
@@ -219,9 +225,9 @@ public class BigBird extends VirtualBot {
     }
 
     /**
-     *  Create the HardwareMap object
+     * Create the HardwareMap object
      */
-    protected void createHardwareMap(){
+    protected void createHardwareMap() {
         //Instantiate a new (empty) HardwareMap
         hardwareMap = new HardwareMap();
 
@@ -229,12 +235,12 @@ public class BigBird extends VirtualBot {
         motorType = MotorType.Neverest20;
 
         //Add the drive motors and arm motor using HardwareMap.put(...) method
-        String[] motorNames = new String[] {"motorRearLeft", "motorFrontLeft", "motorFrontRight", "motorRearRight", "motorLiftLeft", "motorLiftRight"};
-        for (String name: motorNames) hardwareMap.put(name, new DcMotorExImpl(motorType));
+        String[] motorNames = new String[]{"motorRearLeft", "motorFrontLeft", "motorFrontRight", "motorRearRight", "motorLiftLeft", "motorLiftRight"};
+        for (String name : motorNames) hardwareMap.put(name, new DcMotorExImpl(motorType));
 
         //Add the distance sensors
         String[] distNames = new String[]{"sensorRangeFront", "sensorRangeLeft", "sensorRangeRear", "sensorRangeRight"};
-        for (String name: distNames) hardwareMap.put(name, controller.new DistanceSensorImpl());
+        for (String name : distNames) hardwareMap.put(name, controller.new DistanceSensorImpl());
 
         //Add the BNO055IMUImpl sensor
         hardwareMap.put("imu1", new BNO055IMUImpl(this, 10));
@@ -244,17 +250,18 @@ public class BigBird extends VirtualBot {
 
         //Add the ServoImpl object
         String[] servoNames = new String[]{"claw", "grabTurn", "blockFlipper"};
-        for (String name: servoNames) hardwareMap.put(name, new ServoImpl());
+        for (String name : servoNames) hardwareMap.put(name, new ServoImpl());
 
         String[] crservoNames = new String[]{"slide", "cap"};
-        for (String name: crservoNames) hardwareMap.put(name, new CRServoImpl(360));
+        for (String name : crservoNames) hardwareMap.put(name, new CRServoImpl(360));
     }
 
     /**
      * Update robot position on field and update the robot sensors
+     *
      * @param millis milliseconds since the previous update
      */
-    public synchronized void updateStateAndSensors(double millis){
+    public synchronized void updateStateAndSensors(double millis) {
 
         // Array to contain the interval change in ticks for each drive motor.
         double[] deltaPos = new double[4];
@@ -281,9 +288,9 @@ public class BigBird extends VirtualBot {
                 robotDeltaPos[1]: interval motion in the Robot-Y direction (i.e., robot forward or reverse)
                 robotDeltaPos[2]: interval counter-clockwise rotation of robot in radians
          */
-        double[] robotDeltaPos = new double[] {0,0,0,0};
-        for (int i=0; i<4; i++){
-            for (int j = 0; j<4; j++){
+        double[] robotDeltaPos = new double[]{0, 0, 0, 0};
+        for (int i = 0; i < 4; i++) {
+            for (int j = 0; j < 4; j++) {
                 robotDeltaPos[i] += tWR[i][j] * w[j];
             }
         }
@@ -313,7 +320,7 @@ public class BigBird extends VirtualBot {
         /*
         This code is necessary to constrain x and y, so the robot can't escape the field.
          */
-        if (x >  (halfFieldWidth - halfBotWidth)) x = halfFieldWidth - halfBotWidth;
+        if (x > (halfFieldWidth - halfBotWidth)) x = halfFieldWidth - halfBotWidth;
         else if (x < (halfBotWidth - halfFieldWidth)) x = halfBotWidth - halfFieldWidth;
         if (y > (halfFieldWidth - halfBotWidth)) y = halfFieldWidth - halfBotWidth;
         else if (y < (halfBotWidth - halfFieldWidth)) y = halfBotWidth - halfFieldWidth;
@@ -334,10 +341,10 @@ public class BigBird extends VirtualBot {
         sensorColorBottom.updateColor(x, y);
 
         final double piOver2 = Math.PI / 2.0;
-        for (int i = 0; i<4; i++){
+        for (int i = 0; i < 4; i++) {
             double sensorHeading = AngleUtils.normalizeRadians(headingRadians + i * piOver2);
-           distanceSensors[i].updateDistance( x - halfBotWidth * Math.sin(sensorHeading),
-                   y + halfBotWidth * Math.cos(sensorHeading), sensorHeading);
+            distanceSensors[i].updateDistance(x - halfBotWidth * Math.sin(sensorHeading),
+                    y + halfBotWidth * Math.cos(sensorHeading), sensorHeading);
         }
 
         /*
@@ -353,20 +360,20 @@ public class BigBird extends VirtualBot {
         if (newrArmScale >= 1.0 && newrArmScale <= 4) rLiftScale = newrArmScale;
 
         double capTicks = cap.updatePositionDegrees(millis);
-        double newCapScale = capScale + capTicks/360.0;
+        double newCapScale = capScale + capTicks / 360.0;
         if (newCapScale >= 1.0 && newCapScale <= 2.0) capScale = newCapScale;
 
         double slideTicks = slide.updatePositionDegrees(millis);
-        double newSlideScale = slideScale + slideTicks/360.0;
+        double newSlideScale = slideScale + slideTicks / 360.0;
         if (newSlideScale >= 1.0 && newSlideScale <= 2.0) slideScale = newSlideScale;
     }
 
     /**
-     *  Update the display of the robot UI. This method will be called from the UI Thread via a call to
-     *  Platform.runLater().
+     * Update the display of the robot UI. This method will be called from the UI Thread via a call to
+     * Platform.runLater().
      */
     @Override
-    public synchronized void updateDisplay(){
+    public synchronized void updateDisplay() {
         /*
         This call to super.updateDisplay() is essential. the superclass method puts the robot in the correct
         position and orientation on the field.
@@ -381,19 +388,18 @@ public class BigBird extends VirtualBot {
         upslideScaleTransform.setY(slideScale);
         capslideScaleTransform.setY(capScale);
 
-        ((Rotate)flipper.getTransforms().get(0)).setAngle(blockFlipper.getPosition()*270);
-        ((Rotate)grab.getTransforms().get(0)).setAngle(claw.getPosition()*180);
-        ((Rotate)rotate.getTransforms().get(0)).setAngle(turn.getPosition()*180);
-
+        ((Rotate) flipper.getTransforms().get(0)).setAngle(blockFlipper.getPosition() * 270);
+        ((Rotate) grab.getTransforms().get(0)).setAngle(claw.getPosition() * 180);
+        ((Rotate) rotate.getTransforms().get(0)).setAngle(turn.getPosition() * 180);
 
 
     }
 
     /**
-     *  Stop all motors and close the BNO055IMU
+     * Stop all motors and close the BNO055IMU
      */
-    public void powerDownAndReset(){
-        for (int i=0; i<4; i++) driveMotors[i].stopAndReset();
+    public void powerDownAndReset() {
+        for (int i = 0; i < 4; i++) driveMotors[i].stopAndReset();
         lLiftMotor.stopAndReset();
         rLiftMotor.stopAndReset();
 

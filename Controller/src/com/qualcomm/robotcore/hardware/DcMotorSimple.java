@@ -48,23 +48,25 @@ public interface DcMotorSimple extends HardwareDevice {
      * to have drive train motors on two sides of a robot: during initialization,
      * one would be set at at forward, the other at reverse, and the
      * difference between the two in that respect could be thereafter ignored.
-     *
      */
-    enum Direction { FORWARD, REVERSE;
+    enum Direction {
+        FORWARD, REVERSE;
+
         public Direction inverted() {
-            return this==FORWARD ? REVERSE : FORWARD;
+            return this == FORWARD ? REVERSE : FORWARD;
         }
     }
 
     /**
      * Sets the logical direction in which this motor operates.
-     * @param direction the direction to set for this motor
      *
+     * @param direction the direction to set for this motor
      */
     void setDirection(Direction direction);
 
     /**
      * Returns the current logical direction in which this motor is set as operating.
+     *
      * @return the current logical direction in which this motor is set as operating.
      */
     Direction getDirection();
@@ -82,6 +84,7 @@ public interface DcMotorSimple extends HardwareDevice {
 
     /**
      * Returns the current configured power level of the motor.
+     *
      * @return the current level of the motor, a value in the interval [0.0, 1.0]
      */
     double getPower();

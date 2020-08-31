@@ -10,7 +10,7 @@ public class PassiveColorSensorImpl implements ColorSensor {
     /**
      * Internal Use Only. Update the color sensor using provided values of R, G, B
      */
-    public synchronized void updateColor(int R, int G, int B){
+    public synchronized void updateColor(int R, int G, int B) {
         red = R;
         green = G;
         blue = B;

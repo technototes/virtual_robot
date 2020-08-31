@@ -45,27 +45,24 @@ package com.qualcomm.robotcore.hardware;
  * @see <a href="https://en.wikipedia.org/wiki/PID_controller">PID controller</a>
  * @see DcMotorEx#setPIDFCoefficients(DcMotor.RunMode, PIDFCoefficients)
  */
-public class PIDFCoefficients
-{
+public class PIDFCoefficients {
     public double p;
     public double i;
     public double d;
     public double f;
     public MotorControlAlgorithm algorithm;
 
-    @Override public String toString()
-    {
+    @Override
+    public String toString() {
         return String.format("%s(p=%f i=%f d=%f f=%f alg=%s)", getClass().getSimpleName(), p, i, d, f, algorithm);
     }
 
-    public PIDFCoefficients()
-    {
+    public PIDFCoefficients() {
         this.p = this.i = this.d = this.f = 0;
         this.algorithm = MotorControlAlgorithm.PIDF;
     }
 
-    public PIDFCoefficients(double p, double i, double d, double f, MotorControlAlgorithm algorithm)
-    {
+    public PIDFCoefficients(double p, double i, double d, double f, MotorControlAlgorithm algorithm) {
         this.p = p;
         this.i = i;
         this.d = d;
@@ -73,13 +70,11 @@ public class PIDFCoefficients
         this.algorithm = algorithm;
     }
 
-    public PIDFCoefficients(double p, double i, double d, double f)
-    {
+    public PIDFCoefficients(double p, double i, double d, double f) {
         this(p, i, d, f, MotorControlAlgorithm.PIDF);
     }
 
-    public PIDFCoefficients(PIDFCoefficients them)
-    {
+    public PIDFCoefficients(PIDFCoefficients them) {
         this.p = them.p;
         this.i = them.i;
         this.d = them.d;
@@ -87,8 +82,7 @@ public class PIDFCoefficients
         this.algorithm = them.algorithm;
     }
 
-    public PIDFCoefficients(PIDCoefficients them)
-    {
+    public PIDFCoefficients(PIDCoefficients them) {
         this.p = them.p;
         this.i = them.i;
         this.d = them.d;

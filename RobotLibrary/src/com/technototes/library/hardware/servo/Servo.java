@@ -1,10 +1,6 @@
 package com.technototes.library.hardware.servo;
 
-import com.technototes.library.hardware.Followable;
-import com.technototes.library.hardware.HardwareDevice;
-import com.technototes.library.hardware.Invertable;
-import com.technototes.library.hardware.PID;
-import com.technototes.library.hardware.Sensored;
+import com.technototes.library.hardware.*;
 import com.technototes.library.util.PIDUtils;
 
 public class Servo extends HardwareDevice<com.qualcomm.robotcore.hardware.Servo> implements Sensored, Invertable<Servo>, Followable<Servo>, PID {
@@ -24,7 +20,7 @@ public class Servo extends HardwareDevice<com.qualcomm.robotcore.hardware.Servo>
     }
 
 
-    public Servo setStartingPosition(double pos){
+    public Servo setStartingPosition(double pos) {
         device.setPosition(pos);
         return this;
     }

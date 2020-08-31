@@ -9,6 +9,8 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface BotConfig {
     String name();
+
     String filename();
+
     boolean disabled() default false;
 }

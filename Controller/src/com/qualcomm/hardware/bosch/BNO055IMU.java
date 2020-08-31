@@ -54,15 +54,14 @@ public interface BNO055IMU extends HardwareDevice {
     /**
      * Parameters for initialization of the BNO055IMU
      */
-    class Parameters
-    {
-        public AngleUnit        angleUnit           = AngleUnit.RADIANS;
-        public AccelUnit        accelUnit           = AccelUnit.METERS_PERSEC_PERSEC;
-        public CalibrationData  calibrationData     = null;
-        public String           calibrationDataFile = null;
+    class Parameters {
+        public AngleUnit angleUnit = AngleUnit.RADIANS;
+        public AccelUnit accelUnit = AccelUnit.METERS_PERSEC_PERSEC;
+        public CalibrationData calibrationData = null;
+        public String calibrationDataFile = null;
         public AccelerationIntegrator accelerationIntegrationAlgorithm = null;
-        public boolean          loggingEnabled      = false;
-        public String           loggingTag          = "AdaFruitIMU";
+        public boolean loggingEnabled = false;
+        public String loggingTag = "AdaFruitIMU";
     }
 
     /**
@@ -73,6 +72,7 @@ public interface BNO055IMU extends HardwareDevice {
     /**
      * Get the angular orientation (as an Orientation object), using the AxesReference, AxesOrder, and AngleUnit
      * specified by the imu's Parameters object
+     *
      * @return angular orientation
      */
     Orientation getAngularOrientation();
@@ -81,8 +81,9 @@ public interface BNO055IMU extends HardwareDevice {
     /**
      * Get the angular orientation (as an Orientation object), using the AxesReference, AxesOrder, and AngleUnit
      * specified by the arguments
+     *
      * @param reference axes reference
-     * @param order axes order
+     * @param order     axes order
      * @param angleUnit angle unit
      * @return angular orientation
      */
@@ -92,21 +93,23 @@ public interface BNO055IMU extends HardwareDevice {
     /**
      * Do-nothing interface for compatibility with FTC SDK
      */
-    interface AccelerationIntegrator{}
+    interface AccelerationIntegrator {
+    }
 
     /**
      * Do-nothing class for compatibility with FTC SDK
      */
-    class CalibrationData {}
+    class CalibrationData {
+    }
 
     /**
      * Enumeration of angle units
      */
-    enum AngleUnit { RADIANS, DEGREES }
+    enum AngleUnit {RADIANS, DEGREES}
 
     /**
      * Enumeration of acceleration units
      */
-    enum AccelUnit { METERS_PERSEC_PERSEC, MILLI_EARTH_GRAVITY }
+    enum AccelUnit {METERS_PERSEC_PERSEC, MILLI_EARTH_GRAVITY}
 
 }

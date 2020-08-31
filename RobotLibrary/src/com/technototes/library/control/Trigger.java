@@ -15,8 +15,5 @@ public abstract class Trigger {
 
     public abstract Trigger toggleWhenDeactivated(Command c);
 
-    public abstract Trigger toggleWhileActivated(Command c);
-
-    public abstract Trigger toggleWhileDeactivated(Command c);
 
 }

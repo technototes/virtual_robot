@@ -38,10 +38,13 @@ public class AnalogInput implements HardwareDevice {
     private double voltage = 0;
     private final double MAX_ANALOG_INPUT_VOLTAGE;
 
-    public AnalogInput(double maxVoltage){ MAX_ANALOG_INPUT_VOLTAGE = maxVoltage; }
+    public AnalogInput(double maxVoltage) {
+        MAX_ANALOG_INPUT_VOLTAGE = maxVoltage;
+    }
 
     /**
      * Returns the current voltage of this input.
+     *
      * @return the current analog input voltage, in volts.
      */
     public synchronized double getVoltage() {
@@ -51,12 +54,13 @@ public class AnalogInput implements HardwareDevice {
     /**
      * Internal use only. Update the value of voltage.
      */
-    public synchronized void update(double voltage){
+    public synchronized void update(double voltage) {
         this.voltage = voltage;
     }
 
     /**
      * Returns the maximum value that getVoltage() is capable of reading
+     *
      * @return the maximum value that getVoltage() is capable of reading, in volts.
      * @see #getVoltage()
      */

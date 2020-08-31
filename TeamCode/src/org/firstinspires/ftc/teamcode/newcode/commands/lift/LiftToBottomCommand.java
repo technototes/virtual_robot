@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.teamcode.newcode.commands.lift;
 
 import com.technototes.library.command.Command;
-
 import org.firstinspires.ftc.teamcode.newcode.subsystems.LiftSubsystem;
 
 public class LiftToBottomCommand extends Command {

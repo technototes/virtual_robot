@@ -1,20 +1,15 @@
 package org.firstinspires.ftc.teamcode.newcode;
 
-import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.technototes.library.hardware.motor.EncodedMotor;
 import com.technototes.library.hardware.motor.Motor;
+import com.technototes.library.hardware.sensor.IMU;
 import com.technototes.library.hardware.sensor.RangeSensor;
 import com.technototes.library.hardware.servo.Servo;
 import com.technototes.library.structure.HardwareBase;
-import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
-import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
-import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 
 
 public class Hardware extends HardwareBase {
@@ -52,9 +47,9 @@ public class Hardware extends HardwareBase {
     public Motor<DcMotor> rlMotor;
     public Motor<DcMotor> rrMotor;
 
-    public BNO055IMU imu;
+    public IMU imu;
 
-    public Hardware(HardwareMap map){
+    public Hardware(HardwareMap map) {
         hardwareMap = map;
 
         slide = new Motor<CRServo>("slide");
@@ -80,17 +75,10 @@ public class Hardware extends HardwareBase {
         rlMotor = new Motor<DcMotor>("motorRearLeft");
         rrMotor = new Motor<DcMotor>("motorRearRight");
 
-        BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
-        parameters.angleUnit = BNO055IMU.AngleUnit.DEGREES;
-        imu = hardwareMap.get(BNO055IMU.class, "imu1");
-        imu.initialize(parameters);
+        imu = new IMU("imu1");
 
 
     }
-    public double gyroHeading2() {
-        Orientation angles1 =
-                imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
-        return -AngleUnit.DEGREES.fromUnit(angles1.angleUnit, angles1.firstAngle);
-    }
+
 
 }

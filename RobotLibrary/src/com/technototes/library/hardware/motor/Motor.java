@@ -34,7 +34,7 @@ public class Motor<T extends DcMotorSimple> extends HardwareDevice<T> implements
     }
 
     public void setSpeedWithScale(double val, double scale) {
-        device.setPower(val*scale);
+        device.setPower(val * scale);
     }
 
     public double getSpeed() {

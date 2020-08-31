@@ -1,9 +1,9 @@
 package com.qualcomm.hardware.bosch;
 
-import virtual_robot.controller.VirtualBot;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
+import virtual_robot.controller.VirtualBot;
 
 /**
  * Implementation of the BNO055IMU interface
@@ -18,33 +18,36 @@ public class BNO055IMUImpl implements BNO055IMU {
     private long latencyNanos = 0;
     private long prevNanos = System.nanoTime();
 
-    public BNO055IMUImpl(VirtualBot bot){
+    public BNO055IMUImpl(VirtualBot bot) {
         this.bot = bot;
     }
 
-    public BNO055IMUImpl(VirtualBot bot, int latencyMillis){
+    public BNO055IMUImpl(VirtualBot bot, int latencyMillis) {
         this.bot = bot;
         latencyNanos = latencyMillis * 1000000;
     }
 
     /**
      * Initialize the BNO055IMU
+     *
      * @param parameters Parameters object
      * @return true to indicate initialization was successful
      */
-    public synchronized boolean initialize(Parameters parameters){
+    public synchronized boolean initialize(Parameters parameters) {
         initialized = true;
         this.parameters = parameters;
         headingRadians = initialHeadingRadians = bot.getHeadingRadians();
         return true;
     }
 
-    public synchronized Parameters getParameters() { return parameters; }
+    public synchronized Parameters getParameters() {
+        return parameters;
+    }
 
     /**
      * Close the BNO055IMU
      */
-    public synchronized void close(){
+    public synchronized void close() {
         initialized = false;
         headingRadians = 0;
         initialHeadingRadians = 0;
@@ -53,6 +56,7 @@ public class BNO055IMUImpl implements BNO055IMU {
     /**
      * Get the angular orientation (as an Orientation object), using the AxesReference, AxesOrder, and AngleUnit
      * specified by the imu's Parameters object
+     *
      * @return angular orientation
      */
     public synchronized Orientation getAngularOrientation() {
@@ -65,8 +69,9 @@ public class BNO055IMUImpl implements BNO055IMU {
     /**
      * Get the angular orientation (as an Orientation object), using the AxesReference, AxesOrder, and AngleUnit
      * specified by the arguments
+     *
      * @param reference axes reference
-     * @param order axes order
+     * @param order     axes order
      * @param angleUnit angle unit
      * @return angular orientation
      */
@@ -87,18 +92,25 @@ public class BNO055IMUImpl implements BNO055IMU {
         }
 
         switch (order) {
-            case ZXY: case ZXZ: case ZYX: case ZYZ:
+            case ZXY:
+            case ZXZ:
+            case ZYX:
+            case ZYZ:
                 firstAngle = heading;
                 break;
-            case XZX: case XZY: case YZX: case YZY:
+            case XZX:
+            case XZY:
+            case YZX:
+            case YZY:
                 secondAngle = heading;
                 break;
-            case XYZ: case YXZ:
+            case XYZ:
+            case YXZ:
                 thirdAngle = heading;
                 break;
             case YXY:
                 secondAngle = heading;
-                if (reference == AxesReference.INTRINSIC){
+                if (reference == AxesReference.INTRINSIC) {
                     firstAngle = -piOver2;
                     thirdAngle = piOver2;
                 } else {
@@ -108,7 +120,7 @@ public class BNO055IMUImpl implements BNO055IMU {
                 break;
             case XYX:
                 secondAngle = heading;
-                if (reference == AxesReference.INTRINSIC){
+                if (reference == AxesReference.INTRINSIC) {
                     firstAngle = piOver2;
                     thirdAngle = -piOver2;
                 } else {
@@ -116,16 +128,17 @@ public class BNO055IMUImpl implements BNO055IMU {
                     thirdAngle = piOver2;
                 }
         }
-        return new Orientation(reference, order, angleUnit, (float)firstAngle, (float)secondAngle, (float)thirdAngle,
+        return new Orientation(reference, order, angleUnit, (float) firstAngle, (float) secondAngle, (float) thirdAngle,
                 System.nanoTime());
 
     }
 
     /**
      * For internal use only
+     *
      * @param heading
      */
-    public synchronized void updateHeadingRadians( double heading ){
+    public synchronized void updateHeadingRadians(double heading) {
         long nanos = System.nanoTime();
         if (nanos < (prevNanos + latencyNanos)) return;
         headingRadians = heading;

@@ -48,6 +48,7 @@ public interface DistanceSensor extends HardwareDevice {
 
     /**
      * Return distance of sensor from wall using specified distance unit
+     *
      * @param distanceUnit
      * @return distance
      */

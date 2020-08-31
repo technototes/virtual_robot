@@ -1,7 +1,6 @@
 package com.technototes.library.control.gamepad;
 
 import com.qualcomm.robotcore.hardware.Gamepad;
-import com.technototes.library.util.MathUtils;
 
 public class CommandGamepad {
     public double stickDeadzone = 0.1;

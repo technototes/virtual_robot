@@ -1,42 +1,47 @@
 package virtual_robot.controller;
 
-import com.qualcomm.robotcore.eventloop.opmode.*;
+import com.qualcomm.hardware.bosch.BNO055IMU;
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
+import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.*;
 import com.studiohartman.jamepad.ControllerManager;
 import com.studiohartman.jamepad.ControllerState;
+import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Group;
-import javafx.scene.control.*;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.shape.Polyline;
-import javafx.scene.shape.Rectangle;
-import javafx.util.Callback;
-import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.reflections.Reflections;
-import virtual_robot.config.Config;
-import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Rectangle2D;
+import javafx.scene.Group;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.PixelReader;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
-import com.qualcomm.hardware.bosch.BNO055IMU;
-import com.qualcomm.robotcore.hardware.DcMotorImpl;
+import javafx.scene.shape.Polyline;
+import javafx.scene.shape.Rectangle;
+import javafx.util.Callback;
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+import org.reflections.Reflections;
+import virtual_robot.config.Config;
 import virtual_robot.controller.robots.classes.MechanumBot;
 
 import java.io.IOException;
 import java.lang.annotation.Annotation;
-import java.util.*;
+import java.util.Comparator;
+import java.util.HashSet;
+import java.util.Random;
+import java.util.Set;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -47,19 +52,32 @@ import java.util.concurrent.TimeUnit;
 public class VirtualRobotController {
 
     //User Interface
-    @FXML private StackPane fieldPane;
-    @FXML ImageView imgViewBackground;
-    @FXML private ComboBox<Class<?>> cbxConfig;
-    @FXML private Button driverButton;
-    @FXML private ComboBox<Class<?>> cbxOpModes;
-    @FXML private Slider sldRandomMotorError;
-    @FXML private Slider sldSystematicMotorError;
-    @FXML private Slider sldMotorInertia;
-    @FXML private TextArea txtTelemetry;
-    @FXML private CheckBox checkBoxGamePad1;
-    @FXML private CheckBox checkBoxGamePad2;
-    @FXML private BorderPane borderPane;
-    @FXML private CheckBox cbxShowPath;
+    @FXML
+    private StackPane fieldPane;
+    @FXML
+    ImageView imgViewBackground;
+    @FXML
+    private ComboBox<Class<?>> cbxConfig;
+    @FXML
+    private Button driverButton;
+    @FXML
+    private ComboBox<Class<?>> cbxOpModes;
+    @FXML
+    private Slider sldRandomMotorError;
+    @FXML
+    private Slider sldSystematicMotorError;
+    @FXML
+    private Slider sldMotorInertia;
+    @FXML
+    private TextArea txtTelemetry;
+    @FXML
+    private CheckBox checkBoxGamePad1;
+    @FXML
+    private CheckBox checkBoxGamePad2;
+    @FXML
+    private BorderPane borderPane;
+    @FXML
+    private CheckBox cbxShowPath;
 
     //Virtual Hardware
     private HardwareMap hardwareMap = null;
@@ -104,15 +122,17 @@ public class VirtualRobotController {
     private ChangeListener<Number> sliderChangeListener = new ChangeListener<Number>() {
         @Override
         public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-            for (DcMotor motor: hardwareMap.dcMotor) {
-                ((DcMotorImpl)motor).setRandomErrorFrac(sldRandomMotorError.getValue());
-                ((DcMotorImpl)motor).setSystematicErrorFrac(sldSystematicMotorError.getValue() * 2.0 * (0.5 - random.nextDouble()));
-                ((DcMotorImpl)motor).setInertia(1.0 - Math.pow(10.0, -sldMotorInertia.getValue()));
+            for (DcMotor motor : hardwareMap.dcMotor) {
+                ((DcMotorImpl) motor).setRandomErrorFrac(sldRandomMotorError.getValue());
+                ((DcMotorImpl) motor).setSystematicErrorFrac(sldSystematicMotorError.getValue() * 2.0 * (0.5 - random.nextDouble()));
+                ((DcMotorImpl) motor).setInertia(1.0 - Math.pow(10.0, -sldMotorInertia.getValue()));
             }
         }
     };
 
-    boolean getOpModeInitialized(){ return opModeInitialized; }
+    boolean getOpModeInitialized() {
+        return opModeInitialized;
+    }
 
     public void initialize() {
         OpMode.setVirtualRobotController(this);
@@ -132,7 +152,7 @@ public class VirtualRobotController {
         imgViewBackground.setViewport(new Rectangle2D(0, 0, fieldWidth, fieldWidth));
         imgViewBackground.setImage(backgroundImage);
         Rectangle pathRect = new Rectangle(fieldWidth, fieldWidth);
-        pathRect.setFill(Color.color(1,0,0,0));
+        pathRect.setFill(Color.color(1, 0, 0, 0));
         pathLine = new Polyline();
         pathLine.setStroke(Color.LAWNGREEN);
         pathLine.setStrokeWidth(2);
@@ -141,16 +161,16 @@ public class VirtualRobotController {
         sldRandomMotorError.valueProperty().addListener(sliderChangeListener);
         sldSystematicMotorError.valueProperty().addListener(sliderChangeListener);
         sldMotorInertia.valueProperty().addListener(sliderChangeListener);
-        if (Config.USE_VIRTUAL_GAMEPAD){
+        if (Config.USE_VIRTUAL_GAMEPAD) {
             checkBoxGamePad1.setVisible(false);
             checkBoxGamePad2.setVisible(false);
             FXMLLoader loader = new FXMLLoader(getClass().getResource("virtual_gamepad.fxml"));
-            try{
-                HBox hbox = (HBox)loader.load();
+            try {
+                HBox hbox = (HBox) loader.load();
                 virtualGamePadController = loader.getController();
                 virtualGamePadController.setVirtualRobotController(this);
                 borderPane.setBottom(hbox);
-            } catch (IOException e){
+            } catch (IOException e) {
                 System.out.println("Virtual GamePad UI Failed to Load");
             }
             gamePadHelper = new VirtualGamePadHelper();
@@ -164,13 +184,13 @@ public class VirtualRobotController {
         gamePadExecutorService.scheduleAtFixedRate(gamePadHelper, 0, 20, TimeUnit.MILLISECONDS);
     }
 
-    private void setupCbxRobotConfigs(){
+    private void setupCbxRobotConfigs() {
         //Reflections reflections = new Reflections(VirtualRobotApplication.class.getClassLoader());
         Reflections reflections = new Reflections("virtual_robot.controller.robots.classes");
         Set<Class<?>> configClasses = new HashSet<>();
         configClasses.addAll(reflections.getTypesAnnotatedWith(BotConfig.class));
         ObservableList<Class<?>> validConfigClasses = FXCollections.observableArrayList();
-        for (Class<?> c: configClasses){
+        for (Class<?> c : configClasses) {
             if (!c.getAnnotation(BotConfig.class).disabled() && VirtualBot.class.isAssignableFrom(c))
                 validConfigClasses.add(c);
         }
@@ -180,23 +200,23 @@ public class VirtualRobotController {
         cbxConfig.setCellFactory(new Callback<ListView<Class<?>>, ListCell<Class<?>>>() {
             @Override
             public ListCell<Class<?>> call(ListView<Class<?>> param) {
-                final ListCell<Class<?>> cell = new ListCell<Class<?>>(){
+                final ListCell<Class<?>> cell = new ListCell<Class<?>>() {
                     @Override
-                    protected void updateItem(Class<?> cl, boolean bln){
+                    protected void updateItem(Class<?> cl, boolean bln) {
                         super.updateItem(cl, bln);
-                        if (cl == null){
+                        if (cl == null) {
                             setText(null);
                             return;
                         }
                         Annotation a = cl.getAnnotation(BotConfig.class);
-                        setText(((BotConfig)a).name());
+                        setText(((BotConfig) a).name());
                     }
                 };
                 return cell;
             }
         });
 
-        cbxConfig.setButtonCell(new ListCell<Class<?>>(){
+        cbxConfig.setButtonCell(new ListCell<Class<?>>() {
             @Override
             protected void updateItem(Class<?> cl, boolean bln) {
                 super.updateItem(cl, bln);
@@ -211,7 +231,7 @@ public class VirtualRobotController {
     }
 
 
-    public VirtualBot getVirtualBotInstance(Class<?> c){
+    public VirtualBot getVirtualBotInstance(Class<?> c) {
         try {
             Annotation a = c.getAnnotation(BotConfig.class);
             System.out.println("eee");
@@ -222,22 +242,22 @@ public class VirtualRobotController {
             VirtualBot bot = (VirtualBot) loader.getController();
             bot.setUpDisplayGroup(group);
             return bot;
-        } catch (Exception e){
+        } catch (Exception e) {
             System.out.println("Unable to load robot configuration.");
             System.out.println(e.getMessage());
             return null;
         }
     }
 
-    private void setupCbxOpModes(){
+    private void setupCbxOpModes() {
         //Reflections reflections = new Reflections(VirtualRobotApplication.class.getClassLoader());
         Reflections reflections = new Reflections("org.firstinspires.ftc.teamcode");
         Set<Class<?>> opModes = new HashSet<>();
         opModes.addAll(reflections.getTypesAnnotatedWith(TeleOp.class));
         opModes.addAll(reflections.getTypesAnnotatedWith(Autonomous.class));
         nonDisabledOpModeClasses = FXCollections.observableArrayList();
-        for (Class<?> c : opModes){
-            if (c.getAnnotation(Disabled.class) == null && OpMode.class.isAssignableFrom(c)){
+        for (Class<?> c : opModes) {
+            if (c.getAnnotation(Disabled.class) == null && OpMode.class.isAssignableFrom(c)) {
                 nonDisabledOpModeClasses.add(c);
             }
         }
@@ -247,18 +267,18 @@ public class VirtualRobotController {
             public int compare(Class<?> o1, Class<?> o2) {
                 String group1 = null;
                 Annotation a1 = o1.getAnnotation(TeleOp.class);
-                if (a1 != null) group1 = ((TeleOp)a1).group();
-                else{
+                if (a1 != null) group1 = ((TeleOp) a1).group();
+                else {
                     a1 = o1.getAnnotation(Autonomous.class);
-                    if (a1 != null) group1 = ((Autonomous)a1).group();
+                    if (a1 != null) group1 = ((Autonomous) a1).group();
                 }
 
                 String group2 = null;
                 Annotation a2 = o2.getAnnotation(TeleOp.class);
-                if (a2 != null) group2 = ((TeleOp)a2).group();
-                else{
+                if (a2 != null) group2 = ((TeleOp) a2).group();
+                else {
                     a2 = o2.getAnnotation(Autonomous.class);
-                    if (a2 != null) group2 = ((Autonomous)a2).group();
+                    if (a2 != null) group2 = ((Autonomous) a2).group();
                 }
 
                 if (group1 == null) return -1;
@@ -272,19 +292,19 @@ public class VirtualRobotController {
         cbxOpModes.setCellFactory(new Callback<ListView<Class<?>>, ListCell<Class<?>>>() {
             @Override
             public ListCell<Class<?>> call(ListView<Class<?>> param) {
-                final ListCell<Class<?>> cell = new ListCell<Class<?>>(){
+                final ListCell<Class<?>> cell = new ListCell<Class<?>>() {
                     @Override
-                    protected void updateItem(Class<?> cl, boolean bln){
+                    protected void updateItem(Class<?> cl, boolean bln) {
                         super.updateItem(cl, bln);
-                        if (cl == null){
+                        if (cl == null) {
                             setText(null);
                             return;
                         }
                         Annotation a = cl.getAnnotation(TeleOp.class);
-                        if (a != null) setText(((TeleOp)a).group() + ": " + ((TeleOp)a).name());
+                        if (a != null) setText(((TeleOp) a).group() + ": " + ((TeleOp) a).name());
                         else {
                             a = cl.getAnnotation(Autonomous.class);
-                            if (a != null) setText(((Autonomous)a).group() + ": "  + ((Autonomous)a).name());
+                            if (a != null) setText(((Autonomous) a).group() + ": " + ((Autonomous) a).name());
                             else setText("No Name");
                         }
 
@@ -294,7 +314,7 @@ public class VirtualRobotController {
             }
         });
 
-        cbxOpModes.setButtonCell(new ListCell<Class<?>>(){
+        cbxOpModes.setButtonCell(new ListCell<Class<?>>() {
             @Override
             protected void updateItem(Class<?> cl, boolean bln) {
                 super.updateItem(cl, bln);
@@ -317,7 +337,7 @@ public class VirtualRobotController {
 
 
     @FXML
-    public void setConfig(ActionEvent event){
+    public void setConfig(ActionEvent event) {
         if (opModeInitialized || opModeStarted) return;
         if (bot != null) bot.removeFromDisplay(fieldPane);
         bot = getVirtualBotInstance(cbxConfig.getValue());
@@ -329,11 +349,13 @@ public class VirtualRobotController {
         sldMotorInertia.setValue(0.0);
     }
 
-    public StackPane getFieldPane(){ return fieldPane; }
+    public StackPane getFieldPane() {
+        return fieldPane;
+    }
 
     @FXML
-    private void handleDriverButtonAction(ActionEvent event){
-        if (!opModeInitialized){
+    private void handleDriverButtonAction(ActionEvent event) {
+        if (!opModeInitialized) {
             if (!initOpMode()) return;
             pathLine.getPoints().clear();
             txtTelemetry.setText("");
@@ -366,20 +388,18 @@ public class VirtualRobotController {
             executorService = Executors.newSingleThreadScheduledExecutor();
             executorService.scheduleAtFixedRate(singleCycle, 0, 33, TimeUnit.MILLISECONDS);
             opModeThread.start();
-        }
-        else if (!opModeStarted){
+        } else if (!opModeStarted) {
             driverButton.setText("STOP");
             opModeStarted = true;
-        }
-        else{
+        } else {
             driverButton.setText("INIT");
             opModeInitialized = false;
             opModeStarted = false;
             //if (opModeThread.isAlive() && !opModeThread.isInterrupted()) opModeThread.interrupt();
             if (!executorService.isShutdown()) executorService.shutdown();
-            try{
+            try {
                 opModeThread.join(500);
-            } catch(InterruptedException exc) {
+            } catch (InterruptedException exc) {
                 Thread.currentThread().interrupt();
             }
             if (opModeThread.isAlive()) System.out.println("OpMode Thread Failed to Terminate.");
@@ -391,7 +411,7 @@ public class VirtualRobotController {
         }
     }
 
-    private void runOpModeAndCleanUp(){
+    private void runOpModeAndCleanUp() {
 
         try {
             //Activate the hardware map, so that calls to "get" on the hardware map itself, and on dcMotor, etc,
@@ -447,7 +467,7 @@ public class VirtualRobotController {
             //For regular opMode, run user-defined stop() method, if any. For Linear opMode, shut down the
             //helper thread that runs runOpMode.
             opMode.stop();
-        } catch(Exception e){
+        } catch (Exception e) {
             System.out.println("Exception thrown by opModeThread.");
             System.out.println(e.getClass().getName());
             System.out.println(e.getLocalizedMessage());
@@ -472,7 +492,7 @@ public class VirtualRobotController {
     }
 
     @FXML
-    private void handleFieldMouseClick(MouseEvent arg){
+    private void handleFieldMouseClick(MouseEvent arg) {
         if (opModeInitialized || opModeStarted) return;
         bot.positionWithMouseClick(arg);
     }
@@ -482,24 +502,24 @@ public class VirtualRobotController {
         try {
             Class opModeClass = cbxOpModes.getValue();
             opMode = (OpMode) opModeClass.newInstance();
-        } catch (Exception exc){
+        } catch (Exception exc) {
             return false;
         }
         return true;
     }
 
     @FXML
-    private void handleCbxShowPathAction(ActionEvent event){
+    private void handleCbxShowPathAction(ActionEvent event) {
         if (pathLine == null) return;
         pathLine.setVisible(cbxShowPath.isSelected());
     }
 
-    private void updateTelemetryDisplay(){
+    private void updateTelemetryDisplay() {
         if (telemetryTextChanged && telemetryText != null) txtTelemetry.setText(telemetryText);
         telemetryTextChanged = false;
     }
 
-    private void initializeTelemetryTextArea(){
+    private void initializeTelemetryTextArea() {
         StringBuilder sb = new StringBuilder();
         sb.append("Left-click to position bot.");
         sb.append("\nRight-click to orient bot.");
@@ -515,7 +535,7 @@ public class VirtualRobotController {
             for (String servo : servos) sb.append("\n   " + servo);
         }
         Set<String> crservos = hardwareMap.crservo.keySet();
-        if (!crservos.isEmpty()){
+        if (!crservos.isEmpty()) {
             sb.append("\n CR Servos:");
             for (String crservo : crservos) sb.append("\n   " + crservo);
         }
@@ -530,7 +550,7 @@ public class VirtualRobotController {
             for (String gyroSensor : gyroSensors) sb.append("\n   " + gyroSensor);
         }
         Set<String> bno055IMUs = hardwareMap.keySet(BNO055IMU.class);
-        if (!bno055IMUs.isEmpty()){
+        if (!bno055IMUs.isEmpty()) {
             sb.append("\n BNO055IMU Sensors:");
             for (String imuSensor : bno055IMUs) sb.append("\n   " + imuSensor);
         }
@@ -547,33 +567,45 @@ public class VirtualRobotController {
         private int green = 0;
         private int blue = 0;
         private int alpha = 0;
-        public synchronized int red(){ return red; }
-        public synchronized int green(){ return green; }
-        public synchronized int blue(){ return blue; }
-        public synchronized int alpha() { return alpha; }
 
-        public synchronized void updateColor(double x, double y){
-            int colorX = (int)(x + halfFieldWidth);
-            int colorY = (int)(halfFieldWidth - y);
+        public synchronized int red() {
+            return red;
+        }
+
+        public synchronized int green() {
+            return green;
+        }
+
+        public synchronized int blue() {
+            return blue;
+        }
+
+        public synchronized int alpha() {
+            return alpha;
+        }
+
+        public synchronized void updateColor(double x, double y) {
+            int colorX = (int) (x + halfFieldWidth);
+            int colorY = (int) (halfFieldWidth - y);
             double tempRed = 0.0;
             double tempGreen = 0.0;
             double tempBlue = 0.0;
-            for (int row = colorY-4; row < colorY+5; row++)
-                for (int col = colorX - 4; col < colorX+5; col++){
+            for (int row = colorY - 4; row < colorY + 5; row++)
+                for (int col = colorX - 4; col < colorX + 5; col++) {
                     Color c = pixelReader.getColor(col, row);
                     tempRed += c.getRed();
                     tempGreen += c.getGreen();
                     tempBlue += c.getBlue();
                 }
-            tempRed = Math.floor( tempRed * 256.0 / 81.0 );
+            tempRed = Math.floor(tempRed * 256.0 / 81.0);
             if (tempRed == 256) tempRed = 255;
-            tempGreen = Math.floor( tempGreen * 256.0 / 81.0 );
+            tempGreen = Math.floor(tempGreen * 256.0 / 81.0);
             if (tempGreen == 256) tempGreen = 255;
-            tempBlue = Math.floor( tempBlue * 256.0 / 81.0 );
+            tempBlue = Math.floor(tempBlue * 256.0 / 81.0);
             if (tempBlue == 256) tempBlue = 255;
-            red = (int)tempRed;
-            green = (int)tempGreen;
-            blue = (int)tempBlue;
+            red = (int) tempRed;
+            green = (int) tempGreen;
+            blue = (int) tempBlue;
             alpha = Math.max(red, Math.max(green, blue));
         }
     }
@@ -585,7 +617,7 @@ public class VirtualRobotController {
         private static final double MAX_DISTANCE = 1000; //mm
         private static final double MAX_OFFSET = 7.0 * Math.PI / 180.0;
 
-        public synchronized double getDistance(DistanceUnit distanceUnit){
+        public synchronized double getDistance(DistanceUnit distanceUnit) {
             double result;
             if (distanceMM < MIN_DISTANCE) result = MIN_DISTANCE - 1.0;
             else if (distanceMM > MAX_DISTANCE) result = readingWhenOutOfRangeMM;
@@ -593,14 +625,14 @@ public class VirtualRobotController {
             return distanceUnit.fromMm(result);
         }
 
-        public synchronized void updateDistance(double x, double y, double headingRadians){
+        public synchronized void updateDistance(double x, double y, double headingRadians) {
             final double mmPerPixel = 144.0 * 25.4 / fieldWidth;
             final double piOver2 = Math.PI / 2.0;
             double temp = headingRadians / piOver2;
-            int side = (int)Math.round(temp); //-2, -1 ,0, 1, or 2 (2 and -2 both refer to the right side)
+            int side = (int) Math.round(temp); //-2, -1 ,0, 1, or 2 (2 and -2 both refer to the right side)
             double offset = Math.abs(headingRadians - (side * Math.PI / 2.0));
             if (offset > MAX_OFFSET) distanceMM = readingWhenOutOfRangeMM;
-            else switch (side){
+            else switch (side) {
                 case 2:
                 case -2:
                     distanceMM = (y + halfFieldWidth) * mmPerPixel;
@@ -638,18 +670,19 @@ public class VirtualRobotController {
 
     public class TelemetryImpl implements Telemetry {
 
-        public TelemetryImpl(){
+        public TelemetryImpl() {
             data.setLength(0);
             setText(data.toString());
         }
 
         /**
          * Add data to telemetry (note-must call update() to cause the data to be displayed)
+         *
          * @param caption The caption for this telemetry entry.
-         * @param fmt Format string, for formatting the data.
-         * @param data The data to be formatted by the format string.
+         * @param fmt     Format string, for formatting the data.
+         * @param data    The data to be formatted by the format string.
          */
-        public void addData(String caption, String fmt, Object... data){
+        public void addData(String caption, String fmt, Object... data) {
             this.data.append(caption + ": ");
             String s = String.format(fmt, data);
             this.data.append(s + "\n");
@@ -657,10 +690,11 @@ public class VirtualRobotController {
 
         /**
          * Add single data object to telemetry, with a caption (note-must call update() to cause the data to be displayed)
+         *
          * @param caption The caption for this telemetry entry.
-         * @param data The data for this telemetry entry.
+         * @param data    The data for this telemetry entry.
          */
-        public void addData(String caption, Object data){
+        public void addData(String caption, Object data) {
             this.data.append(caption + ": " + data.toString() + "\n");
         }
 
@@ -674,21 +708,21 @@ public class VirtualRobotController {
          * Replace any data currently displayed on telemetry with all data that has been added since the previous call to
          * update(). Note: if no data has been added, this method does nothing.
          */
-        public void update(){
+        public void update() {
             if (data.length() > 0) {
                 setText(data.toString());
                 data.setLength(0);
             }
         }
 
-        private void setText(String text){
+        private void setText(String text) {
             telemetryText = text;
             telemetryTextChanged = true;
         }
 
     }
 
-    public interface GamePadHelper extends Runnable{
+    public interface GamePadHelper extends Runnable {
         public void quit();
     }
 
@@ -700,10 +734,11 @@ public class VirtualRobotController {
             gamepad2.resetValues();
         }
 
-        public void quit(){}
+        public void quit() {
+        }
     }
 
-    public class RealGamePadHelper implements  GamePadHelper {
+    public class RealGamePadHelper implements GamePadHelper {
 
         private int gamePad1Index = -1;
         private int gamePad2Index = -1;
@@ -715,19 +750,19 @@ public class VirtualRobotController {
 
         private ControllerManager controller = null;
 
-        public RealGamePadHelper(){
+        public RealGamePadHelper() {
             controller = new ControllerManager(2);
             controller.initSDLGamepad();
         }
 
-        public void run(){
+        public void run() {
             boolean connectionChanged = false;
             boolean configChanged = false;
 
             ControllerState state0 = controller.getState(0);
             ControllerState state1 = controller.getState(1);
 
-            if (state0.isConnected != isConnected0 || state1.isConnected != isConnected1){
+            if (state0.isConnected != isConnected0 || state1.isConnected != isConnected1) {
                 isConnected0 = state0.isConnected;
                 isConnected1 = state1.isConnected;
                 connectionChanged = true;
@@ -763,7 +798,7 @@ public class VirtualRobotController {
                 changingGamePadConfig = false;
             }
 
-            if (configChanged || connectionChanged){
+            if (configChanged || connectionChanged) {
                 Platform.runLater(new Runnable() {
                     @Override
                     public void run() {
@@ -783,7 +818,7 @@ public class VirtualRobotController {
             else gamepad2.resetValues();
         }
 
-        public void quit(){
+        public void quit() {
             controller.quitSDLGamepad();
         }
 

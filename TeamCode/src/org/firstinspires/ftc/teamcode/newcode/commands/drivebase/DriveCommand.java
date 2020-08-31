@@ -8,7 +8,8 @@ import java.util.function.DoubleSupplier;
 public class DriveCommand extends Command {
     public SimpleMecanumDrivebaseSubsystem subsystem;
     public DoubleSupplier xAxis, yAxis, twist;
-    public DriveCommand(SimpleMecanumDrivebaseSubsystem s, DoubleSupplier x, DoubleSupplier y, DoubleSupplier t){
+
+    public DriveCommand(SimpleMecanumDrivebaseSubsystem s, DoubleSupplier x, DoubleSupplier y, DoubleSupplier t) {
         addRequirements(s);
         subsystem = s;
         xAxis = x;

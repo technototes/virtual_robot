@@ -13,12 +13,13 @@ public class PassiveDistanceSensorImpl implements DistanceSensor {
 
     /**
      * Constructor
-     * @param minDistMM         Minimum distance resulting in a valid reading (mm)
-     * @param maxDistMM         Maximum distance resulting in a valid reading (mm)
-     * @param lowReadingMM      Reading that results when distance is less than minDistMM
-     * @param highReadingMM     Reading that results when distance is greater than maxDistMM
+     *
+     * @param minDistMM     Minimum distance resulting in a valid reading (mm)
+     * @param maxDistMM     Maximum distance resulting in a valid reading (mm)
+     * @param lowReadingMM  Reading that results when distance is less than minDistMM
+     * @param highReadingMM Reading that results when distance is greater than maxDistMM
      */
-    public PassiveDistanceSensorImpl(double minDistMM, double maxDistMM, double lowReadingMM, double highReadingMM){
+    public PassiveDistanceSensorImpl(double minDistMM, double maxDistMM, double lowReadingMM, double highReadingMM) {
         this.minDistMM = minDistMM;
         this.maxDistMM = maxDistMM;
         this.lowReadingMM = lowReadingMM;
@@ -31,10 +32,10 @@ public class PassiveDistanceSensorImpl implements DistanceSensor {
         return distanceUnit.fromMm(distanceMM);
     }
 
-    public synchronized void update(double distanceMM){
-        if (distanceMM < minDistMM){
+    public synchronized void update(double distanceMM) {
+        if (distanceMM < minDistMM) {
             this.distanceMM = lowReadingMM;
-        } else if (distanceMM > maxDistMM){
+        } else if (distanceMM > maxDistMM) {
             this.distanceMM = highReadingMM;
         } else {
             this.distanceMM = distanceMM;

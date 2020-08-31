@@ -1,12 +1,11 @@
 package org.firstinspires.ftc.teamcode.newcode;
 
-import com.technototes.library.command.ConditionalCommand;
+import com.technototes.library.command.CommandScheduler;
 import com.technototes.library.command.InstantCommand;
 import com.technototes.library.command.InstantConditionalCommand;
 import com.technototes.library.control.gamepad.CommandGamepad;
 import com.technototes.library.structure.OIBase;
-
-import com.technototes.library.subsystem.simple.SimpleServoSubsystem;
+import com.technototes.library.subsystem.drivebase.DrivebaseSubsystem;
 import org.firstinspires.ftc.teamcode.newcode.commands.claw.ClawRotateLeftCommand;
 import org.firstinspires.ftc.teamcode.newcode.commands.claw.ClawRotateRightCommand;
 import org.firstinspires.ftc.teamcode.newcode.commands.lift.LiftDownCommand;
@@ -26,7 +25,8 @@ public class OI extends OIBase {
 
     @Override
     public void setDriverControls() {
-        driverGamepad.dpad.down.whenActivated(new InstantCommand(() -> System.out.println("yay")));
+        driverGamepad.dpad.down.toggleWhenActivated(new InstantCommand(() -> robot.drivebaseSubsystem.setDriveSpeed((DrivebaseSubsystem.Speed.TURBO))))
+                .toggleWhenDeactivated(new InstantCommand(() -> robot.drivebaseSubsystem.setDriveSpeed(DrivebaseSubsystem.Speed.NORMAL)));
         driverGamepad.dpad.up.whenActivated(new InstantCommand(() -> robot.blockFlipperSubsystem.setPosition(0.15)))
                 .whenDeactivated(new InstantCommand(() -> robot.blockFlipperSubsystem.setPosition(0.75)));
 

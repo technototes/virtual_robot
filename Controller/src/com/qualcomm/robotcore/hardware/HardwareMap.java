@@ -40,7 +40,7 @@ import java.util.*;
 /**
  * HardwareMap provides access to the virtual robot hardware
  */
-public class HardwareMap implements Iterable<HardwareDevice>{
+public class HardwareMap implements Iterable<HardwareDevice> {
 
     /**
      * Map of all DcMotor devices in this HardwareMap.
@@ -73,7 +73,7 @@ public class HardwareMap implements Iterable<HardwareDevice>{
     private Map<String, List<HardwareDevice>> allDevicesMap = new HashMap<>(15);
 
     /**
-     *  List of all hardware devices in this HardwareMap
+     * List of all hardware devices in this HardwareMap
      */
     private List<HardwareDevice> allDevicesList = new ArrayList<>();
 
@@ -84,37 +84,42 @@ public class HardwareMap implements Iterable<HardwareDevice>{
      * methods.
      */
     private boolean active = false;
-    public void setActive(boolean isActive){ active = isActive; }
+
+    public void setActive(boolean isActive) {
+        active = isActive;
+    }
 
     /**
      * Add a device to the HardwareMap
+     *
      * @param deviceName name of device
-     * @param device device object
+     * @param device     device object
      */
-    public synchronized void put(String deviceName, HardwareDevice device){
+    public synchronized void put(String deviceName, HardwareDevice device) {
         deviceName = deviceName.trim();
         List<HardwareDevice> list = allDevicesMap.get(deviceName);
-        if (list == null){
+        if (list == null) {
             list = new ArrayList<>(1);
             allDevicesMap.put(deviceName, list);
         }
         list.add(device);
         allDevicesList.add(device);
-        if (device instanceof DcMotor) dcMotor.put(deviceName, (DcMotor)device);
-        if (device instanceof ColorSensor) colorSensor.put(deviceName, (ColorSensor)device);
-        if (device instanceof GyroSensor) gyroSensor.put(deviceName, (GyroSensor)device);
-        if (device instanceof Servo) servo.put(deviceName, (Servo)device);
-        if (device instanceof CRServo) crservo.put(deviceName, (CRServo)device);
+        if (device instanceof DcMotor) dcMotor.put(deviceName, (DcMotor) device);
+        if (device instanceof ColorSensor) colorSensor.put(deviceName, (ColorSensor) device);
+        if (device instanceof GyroSensor) gyroSensor.put(deviceName, (GyroSensor) device);
+        if (device instanceof Servo) servo.put(deviceName, (Servo) device);
+        if (device instanceof CRServo) crservo.put(deviceName, (CRServo) device);
     }
 
     /**
      * Obtain a device with a specified name and class or interface from the HardwareMap.
+     *
      * @param classOrInterface
      * @param deviceName
      * @param <T>
      * @return
      */
-    public <T> T get(Class<? extends T> classOrInterface, String deviceName){
+    public <T> T get(Class<? extends T> classOrInterface, String deviceName) {
         T result = tryGet(classOrInterface, deviceName);
         if (result == null) throw new IllegalArgumentException(
                 String.format("No %s named %s is found.", classOrInterface.getName(), deviceName)
@@ -123,16 +128,16 @@ public class HardwareMap implements Iterable<HardwareDevice>{
     }
 
 
-    private synchronized <T> T tryGet(Class<? extends T> classOrInterface, String deviceName){
-        if (!active){
+    private synchronized <T> T tryGet(Class<? extends T> classOrInterface, String deviceName) {
+        if (!active) {
             System.out.println("ERROR: Cannot obtain references to hardware before INIT button is pressed.");
             return null;
         }
         deviceName = deviceName.trim();
         List<HardwareDevice> list = allDevicesMap.get(deviceName);
         if (list != null) {
-            for (HardwareDevice device : list){
-                if(classOrInterface.isInstance(device)) return classOrInterface.cast(device);
+            for (HardwareDevice device : list) {
+                if (classOrInterface.isInstance(device)) return classOrInterface.cast(device);
             }
         }
         return null;
@@ -140,6 +145,7 @@ public class HardwareMap implements Iterable<HardwareDevice>{
 
     /**
      * Returns all the devices which are instances of the indicated class or interface.
+     *
      * @param classOrInterface the class or interface indicating the type of the device object to be retrieved
      * @return all the devices registered in the map which are instances of classOrInterface
      */
@@ -156,15 +162,16 @@ public class HardwareMap implements Iterable<HardwareDevice>{
     /**
      * For internal use only.
      * Obtain set containing the names of all devices in the HardwareMap of a specified class or interface.
+     *
      * @param classOrInterface
      * @param <T>
      * @return
      */
-    public synchronized <T> Set<String> keySet(Class<? extends T> classOrInterface){
+    public synchronized <T> Set<String> keySet(Class<? extends T> classOrInterface) {
         Set<String> result = new HashSet<>();
-        for (String deviceName : allDevicesMap.keySet()){
-            for (HardwareDevice device : allDevicesMap.get(deviceName)){
-                if (classOrInterface.isInstance(device))result.add(deviceName);
+        for (String deviceName : allDevicesMap.keySet()) {
+            for (HardwareDevice device : allDevicesMap.get(deviceName)) {
+                if (classOrInterface.isInstance(device)) result.add(deviceName);
                 break;
             }
         }
@@ -178,24 +185,26 @@ public class HardwareMap implements Iterable<HardwareDevice>{
 
     /**
      * Mapping of devices of a specified type.
+     *
      * @param <DEVICE_TYPE>
      */
-    public class DeviceMapping<DEVICE_TYPE extends HardwareDevice> implements Iterable<DEVICE_TYPE>{
+    public class DeviceMapping<DEVICE_TYPE extends HardwareDevice> implements Iterable<DEVICE_TYPE> {
 
-        private Map<String,DEVICE_TYPE> map = new HashMap<>();
+        private Map<String, DEVICE_TYPE> map = new HashMap<>();
         private Class<DEVICE_TYPE> deviceTypeClass;
 
-        DeviceMapping(Class<DEVICE_TYPE> deviceTypeClass){
+        DeviceMapping(Class<DEVICE_TYPE> deviceTypeClass) {
             this.deviceTypeClass = deviceTypeClass;
         }
 
         /**
          * Obtain device with type DEVICE_TYPE, with the specified device name.
+         *
          * @param deviceName
          * @return
          */
-        public synchronized DEVICE_TYPE get(String deviceName){
-            if (!active){
+        public synchronized DEVICE_TYPE get(String deviceName) {
+            if (!active) {
                 System.out.println("ERROR: Cannot obtain references to hardware before INIT button is pressed.");
                 return null;
             }
@@ -209,27 +218,30 @@ public class HardwareMap implements Iterable<HardwareDevice>{
 
         /**
          * For internal use only.
+         *
          * @param deviceName
          * @param device
          */
-        public synchronized void put(String deviceName, DEVICE_TYPE device){
+        public synchronized void put(String deviceName, DEVICE_TYPE device) {
             deviceName = deviceName.trim();
             map.put(deviceName, device);
         }
 
         /**
          * For internal use only.
+         *
          * @return
          */
-        public synchronized Iterator<DEVICE_TYPE> iterator(){
+        public synchronized Iterator<DEVICE_TYPE> iterator() {
             return new ArrayList<>(map.values()).iterator();
         }
 
         /**
          * For internal use only.
+         *
          * @return
          */
-        public synchronized Set<String> keySet(){
+        public synchronized Set<String> keySet() {
             return map.keySet();
         }
 

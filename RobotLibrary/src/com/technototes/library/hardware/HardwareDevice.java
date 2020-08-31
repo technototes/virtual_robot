@@ -14,8 +14,8 @@ public abstract class HardwareDevice<T extends com.qualcomm.robotcore.hardware.H
         this(d.getDevice());
     }
 
-    public HardwareDevice(String s){
-        this(hardwareMap.get((Class<T>)com.qualcomm.robotcore.hardware.HardwareDevice.class, s));
+    public HardwareDevice(String s) {
+        this(hardwareMap.get((Class<T>) com.qualcomm.robotcore.hardware.HardwareDevice.class, s));
     }
 
     public T getDevice() {

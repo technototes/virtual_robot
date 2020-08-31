@@ -8,7 +8,7 @@ import javafx.scene.image.Image;
 public class Config {
 
     /**
-     *  Width of the field, in pixels
+     * Width of the field, in pixels
      */
     public static final double FIELD_WIDTH = 648;
 

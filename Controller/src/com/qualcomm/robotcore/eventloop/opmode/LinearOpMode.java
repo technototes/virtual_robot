@@ -2,7 +2,7 @@ package com.qualcomm.robotcore.eventloop.opmode;
 
 /**
  * Virtual Robot's implementation of LinearOpMode
- *
+ * <p>
  * Classes extending LinearOpMode must define the "runOpMode" method. They cannot override
  * "loop", "init", "init_loop", "start", or "stop".
  */
@@ -24,12 +24,12 @@ public abstract class LinearOpMode extends OpMode {
      */
     public synchronized void waitForStart() {
         while (!isStarted()) {
-                try {
-                    this.wait();
-                } catch (InterruptedException e) {
-                    Thread.currentThread().interrupt();
-                    return;
-                }
+            try {
+                this.wait();
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+                return;
+            }
         }
     }
 
@@ -41,9 +41,9 @@ public abstract class LinearOpMode extends OpMode {
     public final void idle() {
         // Otherwise, yield back our thread scheduling quantum and give other threads at
         // our priority level a chance to run
-        try{
-            Thread.sleep(0,1);
-        } catch(InterruptedException e){
+        try {
+            Thread.sleep(0, 1);
+        } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         }
     }
@@ -51,15 +51,14 @@ public abstract class LinearOpMode extends OpMode {
 
     /**
      * Pause execution of the OpMode for the indicated number of milliseconds
-     * @param milliseconds
      *
-     * Note: during this pause, the motors will continue running at their previous power settings.
+     * @param milliseconds Note: during this pause, the motors will continue running at their previous power settings.
      */
-    public void sleep(long milliseconds){
+    public void sleep(long milliseconds) {
         if (Thread.currentThread().isInterrupted()) return;
-        try{
+        try {
             Thread.sleep(milliseconds);
-        } catch(InterruptedException exc){
+        } catch (InterruptedException exc) {
             Thread.currentThread().interrupt();
         }
         return;
@@ -150,18 +149,18 @@ public abstract class LinearOpMode extends OpMode {
         // make isStopRequested() return true (and opModeIsActive() return false)
         stopRequested = true;
 
-        if (runOpModeThread != null){
+        if (runOpModeThread != null) {
 
             //Interrupt the runOpMode thread if not yet interrupted
             if (!runOpModeThread.isInterrupted()) runOpModeThread.interrupt();
 
-            try{
+            try {
                 runOpModeThread.join(1000);
-            } catch(InterruptedException e){
+            } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
             }
 
-            if (runOpModeThread.isAlive()){
+            if (runOpModeThread.isAlive()) {
                 System.out.println("Termination of thread for runOpMode has timed out or been interrupted.");
                 System.out.println("Do all loops in the runOpMode method check opModeIsActive()?");
             } else {
@@ -176,7 +175,7 @@ public abstract class LinearOpMode extends OpMode {
 
         //If runOpMode has exited, check for exceptions, shut down the executorService, then interrupt the opMode thread (currentThread)
         if (helper.isFinished()) {
-            if (helper.hasException()){
+            if (helper.hasException()) {
                 System.out.println("Exception from runOpMode:");
                 System.out.println(helper.getException().getClass().getName());
                 System.out.println(helper.getException().getLocalizedMessage());
@@ -192,10 +191,12 @@ public abstract class LinearOpMode extends OpMode {
     }
 
     @Override
-    public final void internalPostInitLoop(){}
+    public final void internalPostInitLoop() {
+    }
 
     @Override
-    public final void internalPostLoop() {}
+    public final void internalPostLoop() {
+    }
 
     /**
      * For internal use only.

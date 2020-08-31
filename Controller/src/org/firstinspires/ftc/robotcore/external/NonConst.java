@@ -32,11 +32,7 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 package org.firstinspires.ftc.robotcore.external;
 
-import java.lang.annotation.Documented;
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import java.lang.annotation.*;
 
 /**
  * {@link NonConst} documents a method that performs its function by updating internal
@@ -44,11 +40,11 @@ import java.lang.annotation.Target;
  * which methods examine the object and return results based on that examination but don't
  * change the internal object state and which methods, by contrast, perform their function
  * but updating or changing internal object state.
+ *
  * @see Const
  */
 @Documented
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.CLASS)
-public @interface NonConst
-    {
-    }
+public @interface NonConst {
+}

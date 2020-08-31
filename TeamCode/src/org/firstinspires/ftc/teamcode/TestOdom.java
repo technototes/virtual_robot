@@ -12,14 +12,14 @@ public class TestOdom extends LinearOpMode {
     EncBot bot = new EncBot();
     double[] pose;
 
-    public void runOpMode(){
+    public void runOpMode() {
         gamepad1.setJoystickDeadzone(0.05f);
         bot.init(hardwareMap);
-        while(!opModeIsActive() && !isStopRequested()){
+        while (!opModeIsActive() && !isStopRequested()) {
             telemetry.addData("time", this.time);
             telemetry.update();
         }
-        while (opModeIsActive()){
+        while (opModeIsActive()) {
             pose = bot.updateOdometry();
             telemetry.addData("time", this.time);
             telemetry.addData("POSE", "x = %.1f  y = %.1f  h = %.1f", pose[0], pose[1],

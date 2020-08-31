@@ -1,11 +1,14 @@
 package virtual_robot.controller.robots.classes;
 
-import com.qualcomm.robotcore.hardware.*;
+import com.qualcomm.hardware.bosch.BNO055IMUImpl;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DcMotorExImpl;
+import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.ServoImpl;
 import com.qualcomm.robotcore.hardware.configuration.MotorType;
 import javafx.fxml.FXML;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.transform.Rotate;
-import com.qualcomm.hardware.bosch.BNO055IMUImpl;
 import virtual_robot.controller.BotConfig;
 import virtual_robot.controller.VirtualBot;
 import virtual_robot.controller.VirtualRobotController;
@@ -14,9 +17,8 @@ import virtual_robot.util.AngleUtils;
 /**
  * For internal use only. Represents a robot with four mechanum wheels, color sensor, four distance sensors,
  * a BNO055IMU, and a Servo-controlled arm on the back.
- *
+ * <p>
  * MechanumBot is the controller class for the "mechanum_bot.fxml" markup file.
- *
  */
 @BotConfig(name = "Mechanum Bot", filename = "mechanum_bot")
 public class MechanumBot extends VirtualBot {
@@ -30,7 +32,8 @@ public class MechanumBot extends VirtualBot {
     private VirtualRobotController.DistanceSensorImpl[] distanceSensors = null;
 
     // backServoArm is instantiated during loading via a fx:id property.
-    @FXML Rectangle backServoArm;
+    @FXML
+    Rectangle backServoArm;
 
     private double wheelCircumference;
     private double interWheelWidth;
@@ -40,14 +43,14 @@ public class MechanumBot extends VirtualBot {
     private double[][] tWR; //Transform from wheel motion to robot motion
 
 
-    public MechanumBot(){
+    public MechanumBot() {
         super();
         hardwareMap.setActive(true);
         motors = new DcMotorExImpl[]{
-                (DcMotorExImpl)hardwareMap.get(DcMotorEx.class, "back_left_motor"),
-                (DcMotorExImpl)hardwareMap.get(DcMotorEx.class, "front_left_motor"),
-                (DcMotorExImpl)hardwareMap.get(DcMotorEx.class, "front_right_motor"),
-                (DcMotorExImpl)hardwareMap.get(DcMotorEx.class, "back_right_motor")
+                (DcMotorExImpl) hardwareMap.get(DcMotorEx.class, "back_left_motor"),
+                (DcMotorExImpl) hardwareMap.get(DcMotorEx.class, "front_left_motor"),
+                (DcMotorExImpl) hardwareMap.get(DcMotorEx.class, "front_right_motor"),
+                (DcMotorExImpl) hardwareMap.get(DcMotorEx.class, "back_right_motor")
         };
         distanceSensors = new VirtualRobotController.DistanceSensorImpl[]{
                 hardwareMap.get(VirtualRobotController.DistanceSensorImpl.class, "front_distance"),
@@ -57,41 +60,41 @@ public class MechanumBot extends VirtualBot {
         };
         //gyro = (VirtualRobotController.GyroSensorImpl)hardwareMap.gyroSensor.get("gyro_sensor");
         imu = hardwareMap.get(BNO055IMUImpl.class, "imu");
-        colorSensor = (VirtualRobotController.ColorSensorImpl)hardwareMap.colorSensor.get("color_sensor");
-        servo = (ServoImpl)hardwareMap.servo.get("back_servo");
+        colorSensor = (VirtualRobotController.ColorSensorImpl) hardwareMap.colorSensor.get("color_sensor");
+        servo = (ServoImpl) hardwareMap.servo.get("back_servo");
         wheelCircumference = Math.PI * botWidth / 4.5;
         interWheelWidth = botWidth * 8.0 / 9.0;
         interWheelLength = botWidth * 7.0 / 9.0;
         wlAverage = (interWheelLength + interWheelWidth) / 2.0;
 
-        tWR = new double[][] {
+        tWR = new double[][]{
                 {-0.25, 0.25, -0.25, 0.25},
                 {0.25, 0.25, 0.25, 0.25},
-                {-0.25/ wlAverage, -0.25/ wlAverage, 0.25/ wlAverage, 0.25/ wlAverage},
+                {-0.25 / wlAverage, -0.25 / wlAverage, 0.25 / wlAverage, 0.25 / wlAverage},
                 {-0.25, 0.25, 0.25, -0.25}
         };
         hardwareMap.setActive(false);
     }
 
-    public void initialize(){
+    public void initialize() {
         //backServoArm = (Rectangle)displayGroup.getChildren().get(8);
         backServoArm.getTransforms().add(new Rotate(0, 37.5, 67.5));
     }
 
-    protected void createHardwareMap(){
+    protected void createHardwareMap() {
         motorType = MotorType.Neverest40;
         hardwareMap = new HardwareMap();
-        String[] motorNames = new String[] {"back_left_motor", "front_left_motor", "front_right_motor", "back_right_motor"};
-        for (String name: motorNames) hardwareMap.put(name, new DcMotorExImpl(motorType));
+        String[] motorNames = new String[]{"back_left_motor", "front_left_motor", "front_right_motor", "back_right_motor"};
+        for (String name : motorNames) hardwareMap.put(name, new DcMotorExImpl(motorType));
         String[] distNames = new String[]{"front_distance", "left_distance", "back_distance", "right_distance"};
-        for (String name: distNames) hardwareMap.put(name, controller.new DistanceSensorImpl());
+        for (String name : distNames) hardwareMap.put(name, controller.new DistanceSensorImpl());
         //hardwareMap.put("gyro_sensor", controller.new GyroSensorImpl());
         hardwareMap.put("imu", new BNO055IMUImpl(this, 10));
         hardwareMap.put("color_sensor", controller.new ColorSensorImpl());
         hardwareMap.put("back_servo", new ServoImpl());
     }
 
-    public synchronized void updateStateAndSensors(double millis){
+    public synchronized void updateStateAndSensors(double millis) {
 
         double[] deltaPos = new double[4];
         double[] w = new double[4];
@@ -102,9 +105,9 @@ public class MechanumBot extends VirtualBot {
             if (i < 2) w[i] = -w[i];
         }
 
-        double[] robotDeltaPos = new double[] {0,0,0,0};
-        for (int i=0; i<4; i++){
-            for (int j = 0; j<4; j++){
+        double[] robotDeltaPos = new double[]{0, 0, 0, 0};
+        for (int i = 0; i < 4; i++) {
+            for (int j = 0; j < 4; j++) {
                 robotDeltaPos[i] += tWR[i][j] * w[j];
             }
         }
@@ -121,7 +124,7 @@ public class MechanumBot extends VirtualBot {
         y += dxR * sin + dyR * cos;
         headingRadians += headingChange;
 
-        if (x >  (halfFieldWidth - halfBotWidth)) x = halfFieldWidth - halfBotWidth;
+        if (x > (halfFieldWidth - halfBotWidth)) x = halfFieldWidth - halfBotWidth;
         else if (x < (halfBotWidth - halfFieldWidth)) x = halfBotWidth - halfFieldWidth;
         if (y > (halfFieldWidth - halfBotWidth)) y = halfFieldWidth - halfBotWidth;
         else if (y < (halfBotWidth - halfFieldWidth)) y = halfBotWidth - halfFieldWidth;
@@ -135,21 +138,21 @@ public class MechanumBot extends VirtualBot {
 
         final double piOver2 = Math.PI / 2.0;
 
-        for (int i = 0; i<4; i++){
+        for (int i = 0; i < 4; i++) {
             double sensorHeading = AngleUtils.normalizeRadians(headingRadians + i * piOver2);
-            distanceSensors[i].updateDistance( x - halfBotWidth * Math.sin(sensorHeading),
+            distanceSensors[i].updateDistance(x - halfBotWidth * Math.sin(sensorHeading),
                     y + halfBotWidth * Math.cos(sensorHeading), sensorHeading);
         }
 
     }
 
-    public synchronized void updateDisplay(){
+    public synchronized void updateDisplay() {
         super.updateDisplay();
-        ((Rotate)backServoArm.getTransforms().get(0)).setAngle(-180.0 * servo.getInternalPosition());
+        ((Rotate) backServoArm.getTransforms().get(0)).setAngle(-180.0 * servo.getInternalPosition());
     }
 
-    public void powerDownAndReset(){
-        for (int i=0; i<4; i++) motors[i].stopAndReset();
+    public void powerDownAndReset() {
+        for (int i = 0; i < 4; i++) motors[i].stopAndReset();
         //gyro.deinit();
         imu.close();
     }

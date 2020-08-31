@@ -5,28 +5,32 @@ import com.qualcomm.robotcore.util.Range;
 /**
  * Implementation of the Servo interface.
  */
-public class ServoImpl implements Servo{
+public class ServoImpl implements Servo {
 
     private double position;
 
-    protected Direction       direction        = Direction.FORWARD;
-    protected double          limitPositionMin = MIN_POSITION;
-    protected double          limitPositionMax = MAX_POSITION;
+    protected Direction direction = Direction.FORWARD;
+    protected double limitPositionMin = MIN_POSITION;
+    protected double limitPositionMax = MAX_POSITION;
 
     /**
      * Set Direction of servo
      */
-    public void setDirection(Direction direction) { this.direction = direction; }
+    public void setDirection(Direction direction) {
+        this.direction = direction;
+    }
 
     /**
      * Get Direction of servo
      */
-    public Direction getDirection() { return this.direction; }
+    public Direction getDirection() {
+        return this.direction;
+    }
 
     /**
      * Scale the range of the servo
      */
-    public void scaleRange(double min, double max){
+    public void scaleRange(double min, double max) {
         min = Range.clip(min, MIN_POSITION, MAX_POSITION);
         max = Range.clip(max, MIN_POSITION, MAX_POSITION);
 
@@ -40,6 +44,7 @@ public class ServoImpl implements Servo{
 
     /**
      * Set position of servo.
+     *
      * @param pos Must be between 0 and 1
      */
     public synchronized void setPosition(double pos) {
@@ -51,9 +56,10 @@ public class ServoImpl implements Servo{
 
     /**
      * Get position of servo.
+     *
      * @return
      */
-    public synchronized double getPosition(){
+    public synchronized double getPosition() {
         double pos = this.position;
         if (direction == Direction.REVERSE) pos = reverse(pos);
         double scaled = Range.scale(pos, limitPositionMin, limitPositionMax, MIN_POSITION, MAX_POSITION);
@@ -62,9 +68,12 @@ public class ServoImpl implements Servo{
 
     /**
      * Get Internal Position -- FOR INTERNAL USE ONLY
+     *
      * @return
      */
-    public synchronized double getInternalPosition(){ return this.position; }
+    public synchronized double getInternalPosition() {
+        return this.position;
+    }
 
 
     private double reverse(double position) {

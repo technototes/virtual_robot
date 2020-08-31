@@ -5,9 +5,7 @@ import com.technototes.library.structure.RobotBase;
 import com.technototes.library.subsystem.simple.SimpleMecanumDrivebaseSubsystem;
 import com.technototes.library.subsystem.simple.SimpleMotorSubsystem;
 import com.technototes.library.subsystem.simple.SimpleServoSubsystem;
-
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.newcode.subsystems.ClawRotateSubsystem;
 import org.firstinspires.ftc.teamcode.newcode.subsystems.LiftSubsystem;
 

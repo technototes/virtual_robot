@@ -7,6 +7,7 @@ public abstract class Sensor<T extends com.qualcomm.robotcore.hardware.HardwareD
     public Sensor(T d) {
         super(d);
     }
+
     public Sensor(String s) {
         super(s);
     }

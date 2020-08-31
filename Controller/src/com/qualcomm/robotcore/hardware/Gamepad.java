@@ -39,7 +39,7 @@ import virtual_robot.controller.VirtualGamePadController;
 
 /**
  * Represents the GamePad.
- *
+ * <p>
  * Note: the fields in the class are all public, but they should not be changed from the OpMode code.
  */
 public class Gamepad {
@@ -48,7 +48,7 @@ public class Gamepad {
     public volatile boolean y = false;
     public volatile boolean a = false;
     public volatile boolean b = false;
-    public volatile float left_stick_x  = 0;
+    public volatile float left_stick_x = 0;
     public volatile float left_stick_y = 0;
     public volatile float right_stick_x = 0;
     public volatile float right_stick_y = 0;
@@ -78,7 +78,7 @@ public class Gamepad {
         return (float) 0.0;
     }
 
-    public void resetValues(){
+    public void resetValues() {
         x = false;
         y = false;
         a = false;
@@ -102,7 +102,7 @@ public class Gamepad {
         right_trigger = 0;
     }
 
-    public void update(ControllerState state){
+    public void update(ControllerState state) {
         x = state.x;
         y = state.y;
         a = state.a;
@@ -126,7 +126,7 @@ public class Gamepad {
         right_trigger = setWithDeadzone(state.rightTrigger);
     }
 
-    public void update(VirtualGamePadController.ControllerState state){
+    public void update(VirtualGamePadController.ControllerState state) {
         x = state.x;
         y = state.y;
         a = state.a;

@@ -1,7 +1,10 @@
 package virtual_robot.controller.robots.classes;
 
 import com.qualcomm.hardware.bosch.BNO055IMUImpl;
-import com.qualcomm.robotcore.hardware.*;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DcMotorExImpl;
+import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.ServoImpl;
 import com.qualcomm.robotcore.hardware.configuration.MotorType;
 import javafx.fxml.FXML;
 import javafx.scene.shape.Rectangle;
@@ -15,11 +18,11 @@ import virtual_robot.util.AngleUtils;
 /**
  * For internal use only. Represents a robot with four mechanum wheels, color sensor, four distance sensors,
  * a BNO055IMU, and an extensible arm with a grabber on the end.
- *
+ * <p>
  * The easiest way to create a new robot configuration is to copy and paste the Java class and the FXML file
  * of an existing configuration, then make make modifications. The ArmBot config is a modification of
  * the MechanumBot config.
- *
+ * <p>
  * The @BotConfig annotation is required. The name will be displayed to the user in the Configuration
  * combo box. The filename refers to the fxml file that contains the markup for the graphical UI.
  * Note: the fxml file must be located in the virtual_robot.controller.robots.classes.fxml folder.
@@ -58,10 +61,14 @@ public class ArmBot extends VirtualBot {
     fxml file must declare fx:id attributes for the Rectangles that represent the arm, hand, and both fingers.
     For example, the attribute for the arm would be:  fx:id="arm"
      */
-    @FXML private Rectangle arm;            //The arm. Must be able to extend/retract (i.e., scale) in Y-dimension.
-    @FXML private Rectangle hand;           //The hand. Must move in Y-dimension as arm extends/retracts.
-    @FXML private Rectangle leftFinger;     //Fingers must open and close based on position of hand servo.
-    @FXML private Rectangle rightFinger;
+    @FXML
+    private Rectangle arm;            //The arm. Must be able to extend/retract (i.e., scale) in Y-dimension.
+    @FXML
+    private Rectangle hand;           //The hand. Must move in Y-dimension as arm extends/retracts.
+    @FXML
+    private Rectangle leftFinger;     //Fingers must open and close based on position of hand servo.
+    @FXML
+    private Rectangle rightFinger;
 
     /*
     Transform objects that will be instantiated in the initialize() method, and will be used in the
@@ -110,13 +117,13 @@ public class ArmBot extends VirtualBot {
 
         //Instantiate the DC Motors using the HardwareMap object. Note the cast to DcMotorImpl.
         motors = new DcMotorExImpl[]{
-                (DcMotorExImpl)hardwareMap.get(DcMotorEx.class,"back_left_motor"),
-                (DcMotorExImpl)hardwareMap.get(DcMotorEx.class, "front_left_motor"),
-                (DcMotorExImpl)hardwareMap.get(DcMotorEx.class, "front_right_motor"),
-                (DcMotorExImpl)hardwareMap.get(DcMotorEx.class, "back_right_motor")
+                (DcMotorExImpl) hardwareMap.get(DcMotorEx.class, "back_left_motor"),
+                (DcMotorExImpl) hardwareMap.get(DcMotorEx.class, "front_left_motor"),
+                (DcMotorExImpl) hardwareMap.get(DcMotorEx.class, "front_right_motor"),
+                (DcMotorExImpl) hardwareMap.get(DcMotorEx.class, "back_right_motor")
         };
 
-        armMotor = (DcMotorExImpl)hardwareMap.get(DcMotorEx.class, "arm_motor");
+        armMotor = (DcMotorExImpl) hardwareMap.get(DcMotorEx.class, "arm_motor");
 
         //Instantiate the four DistanceSensors
         distanceSensors = new VirtualRobotController.DistanceSensorImpl[]{
@@ -127,13 +134,13 @@ public class ArmBot extends VirtualBot {
         };
 
         //Instantiate the hand servo. Note the cast to ServoImpl.
-        handServo = (ServoImpl)hardwareMap.servo.get("hand_servo");
+        handServo = (ServoImpl) hardwareMap.servo.get("hand_servo");
 
         //Instantiate the BNO055IMUImpl object using the HardwareMap.
         imu = hardwareMap.get(BNO055IMUImpl.class, "imu");
 
         //Instantiate the ColorSensorImpl object using the HardwareMap.
-        colorSensor = (VirtualRobotController.ColorSensorImpl)hardwareMap.colorSensor.get("color_sensor");
+        colorSensor = (VirtualRobotController.ColorSensorImpl) hardwareMap.colorSensor.get("color_sensor");
 
         //Assign values to the final variables describing robot geometry
         WHEEL_CIRCUMFERENCE = Math.PI * botWidth / 4.5;
@@ -144,10 +151,10 @@ public class ArmBot extends VirtualBot {
         /* Instantiate the Transform Matrix. This matrix converts from incremental distances moved by each robot wheel
         and the corresponding small changes in robot position and orientation in the robot's coordinate system.
         */
-        tWR = new double[][] {
+        tWR = new double[][]{
                 {-0.25, 0.25, -0.25, 0.25},
                 {0.25, 0.25, 0.25, 0.25},
-                {-0.25/ WIDTH_LENGTH_AVERAGE, -0.25/ WIDTH_LENGTH_AVERAGE, 0.25/ WIDTH_LENGTH_AVERAGE, 0.25/ WIDTH_LENGTH_AVERAGE},
+                {-0.25 / WIDTH_LENGTH_AVERAGE, -0.25 / WIDTH_LENGTH_AVERAGE, 0.25 / WIDTH_LENGTH_AVERAGE, 0.25 / WIDTH_LENGTH_AVERAGE},
                 {-0.25, 0.25, 0.25, -0.25}
         };
 
@@ -157,11 +164,11 @@ public class ArmBot extends VirtualBot {
     }
 
     /**
-     *  The initialize() method is called automatically when the robot's graphical UI is loaded from the
-     *  arm_bot.fxml markup file. It should be used to set up parts of the graphical UI that will change
-     *  as the robot operates
+     * The initialize() method is called automatically when the robot's graphical UI is loaded from the
+     * arm_bot.fxml markup file. It should be used to set up parts of the graphical UI that will change
+     * as the robot operates
      */
-    public void initialize(){
+    public void initialize() {
 
         /*
         Scales the arm with pivot point at center of back of robot (which corresponds to the back of the arm).
@@ -187,9 +194,9 @@ public class ArmBot extends VirtualBot {
     }
 
     /**
-     *  Create the HardwareMap object
+     * Create the HardwareMap object
      */
-    protected void createHardwareMap(){
+    protected void createHardwareMap() {
         //Instantiate a new (empty) HardwareMap
         hardwareMap = new HardwareMap();
 
@@ -197,12 +204,12 @@ public class ArmBot extends VirtualBot {
         motorType = MotorType.Neverest40;
 
         //Add the drive motors and arm motor using HardwareMap.put(...) method
-        String[] motorNames = new String[] {"back_left_motor", "front_left_motor", "front_right_motor", "back_right_motor", "arm_motor"};
-        for (String name: motorNames) hardwareMap.put(name, new DcMotorExImpl(motorType));
+        String[] motorNames = new String[]{"back_left_motor", "front_left_motor", "front_right_motor", "back_right_motor", "arm_motor"};
+        for (String name : motorNames) hardwareMap.put(name, new DcMotorExImpl(motorType));
 
         //Add the distance sensors
         String[] distNames = new String[]{"front_distance", "left_distance", "back_distance", "right_distance"};
-        for (String name: distNames) hardwareMap.put(name, controller.new DistanceSensorImpl());
+        for (String name : distNames) hardwareMap.put(name, controller.new DistanceSensorImpl());
 
         //Add the BNO055IMUImpl sensor
         hardwareMap.put("imu", new BNO055IMUImpl(this, 10));
@@ -216,9 +223,10 @@ public class ArmBot extends VirtualBot {
 
     /**
      * Update robot position on field and update the robot sensors
+     *
      * @param millis milliseconds since the previous update
      */
-    public synchronized void updateStateAndSensors(double millis){
+    public synchronized void updateStateAndSensors(double millis) {
 
         // Array to contain the interval change in ticks for each drive motor.
         double[] deltaPos = new double[4];
@@ -245,9 +253,9 @@ public class ArmBot extends VirtualBot {
                 robotDeltaPos[1]: interval motion in the Robot-Y direction (i.e., robot forward or reverse)
                 robotDeltaPos[2]: interval counter-clockwise rotation of robot in radians
          */
-        double[] robotDeltaPos = new double[] {0,0,0,0};
-        for (int i=0; i<4; i++){
-            for (int j = 0; j<4; j++){
+        double[] robotDeltaPos = new double[]{0, 0, 0, 0};
+        for (int i = 0; i < 4; i++) {
+            for (int j = 0; j < 4; j++) {
                 robotDeltaPos[i] += tWR[i][j] * w[j];
             }
         }
@@ -277,7 +285,7 @@ public class ArmBot extends VirtualBot {
         /*
         This code is necessary to constrain x and y, so the robot can't escape the field.
          */
-        if (x >  (halfFieldWidth - halfBotWidth)) x = halfFieldWidth - halfBotWidth;
+        if (x > (halfFieldWidth - halfBotWidth)) x = halfFieldWidth - halfBotWidth;
         else if (x < (halfBotWidth - halfFieldWidth)) x = halfBotWidth - halfFieldWidth;
         if (y > (halfFieldWidth - halfBotWidth)) y = halfFieldWidth - halfBotWidth;
         else if (y < (halfBotWidth - halfFieldWidth)) y = halfBotWidth - halfFieldWidth;
@@ -298,9 +306,9 @@ public class ArmBot extends VirtualBot {
         colorSensor.updateColor(x, y);
 
         final double piOver2 = Math.PI / 2.0;
-        for (int i = 0; i<4; i++){
+        for (int i = 0; i < 4; i++) {
             double sensorHeading = AngleUtils.normalizeRadians(headingRadians + i * piOver2);
-            distanceSensors[i].updateDistance( x - halfBotWidth * Math.sin(sensorHeading),
+            distanceSensors[i].updateDistance(x - halfBotWidth * Math.sin(sensorHeading),
                     y + halfBotWidth * Math.cos(sensorHeading), sensorHeading);
         }
 
@@ -314,11 +322,11 @@ public class ArmBot extends VirtualBot {
     }
 
     /**
-     *  Update the display of the robot UI. This method will be called from the UI Thread via a call to
-     *  Platform.runLater().
+     * Update the display of the robot UI. This method will be called from the UI Thread via a call to
+     * Platform.runLater().
      */
     @Override
-    public synchronized void updateDisplay(){
+    public synchronized void updateDisplay() {
         /*
         This call to super.updateDisplay() is essential. the superclass method puts the robot in the correct
         position and orientation on the field.
@@ -339,7 +347,7 @@ public class ArmBot extends VirtualBot {
         }
 
         // Mover fingers in the X-direction (i.e., open/close fingers) based on position of the handServo.
-        double fingerPos =  7.5 * handServo.getInternalPosition();
+        double fingerPos = 7.5 * handServo.getInternalPosition();
         if (Math.abs(fingerPos - leftFingerTranslateTransform.getX()) > 0.001) {
             leftFingerTranslateTransform.setX(fingerPos);
             rightFingerTranslateTransform.setX(-fingerPos);
@@ -348,10 +356,10 @@ public class ArmBot extends VirtualBot {
     }
 
     /**
-     *  Stop all motors and close the BNO055IMU
+     * Stop all motors and close the BNO055IMU
      */
-    public void powerDownAndReset(){
-        for (int i=0; i<4; i++) motors[i].stopAndReset();
+    public void powerDownAndReset() {
+        for (int i = 0; i < 4; i++) motors[i].stopAndReset();
         armMotor.stopAndReset();
         imu.close();
     }

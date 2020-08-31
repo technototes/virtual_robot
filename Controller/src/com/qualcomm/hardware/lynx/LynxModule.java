@@ -50,8 +50,7 @@ public class LynxModule implements HardwareDevice {
      * Bulk caching mode that controls the behavior of certain read commands in the actual FTC SDK.
      * These modes have no effect on simulator behavior.
      */
-    public enum BulkCachingMode
-    {
+    public enum BulkCachingMode {
         /**
          * Never replace commands with cached bulk read results.
          */
@@ -73,21 +72,20 @@ public class LynxModule implements HardwareDevice {
 
     /**
      * Returns the current bulk caching mode.
+     *
      * @return current bulk caching mode
      */
-    public BulkCachingMode getBulkCachingMode()
-    {
+    public BulkCachingMode getBulkCachingMode() {
         return bulkCachingMode;
     }
 
     /**
      * Sets the bulk caching mode and clears the cache if necessary.
+     *
      * @param mode new bulk caching mode
      */
-    public void setBulkCachingMode(BulkCachingMode mode)
-    {
-        if (bulkCachingMode == BulkCachingMode.OFF && mode != BulkCachingMode.OFF)
-        {
+    public void setBulkCachingMode(BulkCachingMode mode) {
+        if (bulkCachingMode == BulkCachingMode.OFF && mode != BulkCachingMode.OFF) {
             clearBulkCache();
         }
         bulkCachingMode = mode;
@@ -97,7 +95,8 @@ public class LynxModule implements HardwareDevice {
      * Clears the bulk read cache. DUMMY METHOD, included only for compatibility with op modes that
      * use bulk caching.
      */
-    public void clearBulkCache() {}
+    public void clearBulkCache() {
+    }
 
 
 }

@@ -22,10 +22,12 @@ public class EncodedMotor<T extends DcMotor> extends Motor<T> implements Sensore
 
     public EncodedMotor(HardwareDevice<T> m) {
         super(m.getDevice());
+        encoder = new MotorEncoderSensor(device);
     }
 
     public EncodedMotor(String s) {
         super(s);
+        encoder = new MotorEncoderSensor(device);
     }
 
     @Override
@@ -48,8 +50,8 @@ public class EncodedMotor<T extends DcMotor> extends Motor<T> implements Sensore
 
     @Override
     public boolean setPositionPID(double val) {
-        if (!isAtPosition(val)){
-           setSpeed(PIDUtils.calculatePIDDouble(pid_p, pid_i, pid_d, getSensorValue(), val));
+        if (!isAtPosition(val)) {
+            setSpeed(PIDUtils.calculatePIDDouble(pid_p, pid_i, pid_d, getSensorValue(), val));
         } else {
             setSpeed(0);
             return true;
@@ -64,7 +66,7 @@ public class EncodedMotor<T extends DcMotor> extends Motor<T> implements Sensore
     public boolean setPosition(double ticks, double speed) {
         if (!isAtPosition(ticks)) {
             setSpeed(getSensorValue() < ticks ? speed : -speed);
-        }else {
+        } else {
             setSpeed(0);
             return true;
         }

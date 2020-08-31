@@ -30,17 +30,19 @@ public class DigitalChannelImpl implements DigitalChannel {
 
     /**
      * For internal use only. Update state of the digital channel.
+     *
      * @param state
      */
-    public void update(boolean state){
+    public void update(boolean state) {
         this.state = state;
     }
 
     /**
      * For internal use only. Read the state of the digital channel.
+     *
      * @return
      */
-    public boolean readStateInternal(){
+    public boolean readStateInternal() {
         return this.state;
     }
 

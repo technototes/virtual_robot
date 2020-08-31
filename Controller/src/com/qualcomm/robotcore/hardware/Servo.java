@@ -37,8 +37,6 @@ Modified by FTC Team Beta 8397 for use in the Virtual_Robot Simulator
 
 package com.qualcomm.robotcore.hardware;
 
-import com.qualcomm.robotcore.hardware.HardwareDevice;
-
 /**
  * Provides an subset of the functionality of the Servo interface in the FTC SDK.
  */
@@ -57,24 +55,28 @@ public interface Servo extends HardwareDevice {
 
     /**
      * Method to set the direction
+     *
      * @param direction
      */
     void setDirection(Direction direction);
 
     /**
      * Method to get the direction
+     *
      * @return
      */
     Direction getDirection();
 
     /**
      * Set servo position
+     *
      * @param position Must be between 0 and 1
      */
     void setPosition(double position);
 
     /**
      * Get servo position
+     *
      * @return Current servo position
      */
     double getPosition();

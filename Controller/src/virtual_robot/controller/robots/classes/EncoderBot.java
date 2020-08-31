@@ -14,9 +14,8 @@ import virtual_robot.util.AngleUtils;
 /**
  * For internal use only. Represents a robot with four mechanum wheels, color sensor, four distance sensors,
  * a BNO055IMU, and a Servo-controlled arm on the back.
- *
+ * <p>
  * MechanumBot is the controller class for the "mechanum_bot.fxml" markup file.
- *
  */
 @BotConfig(name = "Encoder Bot", filename = "encoder_bot")
 public class EncoderBot extends VirtualBot {
@@ -34,7 +33,8 @@ public class EncoderBot extends VirtualBot {
     private DeadWheelEncoder xEncoder = null;
 
     // backServoArm is instantiated during loading via a fx:id property.
-    @FXML Rectangle backServoArm;
+    @FXML
+    Rectangle backServoArm;
 
     //Dimensions in inches for drive wheels
     private final double WHEEL_DIAMETER = 4.0;
@@ -63,14 +63,14 @@ public class EncoderBot extends VirtualBot {
 
     private double[][] tWR; //Transform from wheel motion to robot motion
 
-    public EncoderBot(){
+    public EncoderBot() {
         super();
         hardwareMap.setActive(true);
         motors = new DcMotorExImpl[]{
-                (DcMotorExImpl)hardwareMap.get(DcMotorEx.class,"back_left_motor"),
-                (DcMotorExImpl)hardwareMap.get(DcMotorEx.class,"front_left_motor"),
-                (DcMotorExImpl)hardwareMap.get(DcMotorEx.class,"front_right_motor"),
-                (DcMotorExImpl)hardwareMap.get(DcMotorEx.class, "back_right_motor")
+                (DcMotorExImpl) hardwareMap.get(DcMotorEx.class, "back_left_motor"),
+                (DcMotorExImpl) hardwareMap.get(DcMotorEx.class, "front_left_motor"),
+                (DcMotorExImpl) hardwareMap.get(DcMotorEx.class, "front_right_motor"),
+                (DcMotorExImpl) hardwareMap.get(DcMotorEx.class, "back_right_motor")
         };
         distanceSensors = new VirtualRobotController.DistanceSensorImpl[]{
                 hardwareMap.get(VirtualRobotController.DistanceSensorImpl.class, "front_distance"),
@@ -79,8 +79,8 @@ public class EncoderBot extends VirtualBot {
                 hardwareMap.get(VirtualRobotController.DistanceSensorImpl.class, "right_distance")
         };
         imu = hardwareMap.get(BNO055IMUImpl.class, "imu");
-        colorSensor = (VirtualRobotController.ColorSensorImpl)hardwareMap.colorSensor.get("color_sensor");
-        servo = (ServoImpl)hardwareMap.servo.get("back_servo");
+        colorSensor = (VirtualRobotController.ColorSensorImpl) hardwareMap.colorSensor.get("color_sensor");
+        servo = (ServoImpl) hardwareMap.servo.get("back_servo");
         leftEncoder = hardwareMap.get(DeadWheelEncoder.class, "enc_left");
         rightEncoder = hardwareMap.get(DeadWheelEncoder.class, "enc_right");
         xEncoder = hardwareMap.get(DeadWheelEncoder.class, "enc_x");
@@ -95,37 +95,37 @@ public class EncoderBot extends VirtualBot {
         rightEncoderX = RIGHT_ENCODER_X * botWidth / 18.0;
         xEncoderY = X_ENCODER_Y * botWidth / 18.0;
 
-        tWR = new double[][] {
+        tWR = new double[][]{
                 {-0.25, 0.25, -0.25, 0.25},
                 {0.25, 0.25, 0.25, 0.25},
-                {-0.25/ wlAverage, -0.25/ wlAverage, 0.25/ wlAverage, 0.25/ wlAverage},
+                {-0.25 / wlAverage, -0.25 / wlAverage, 0.25 / wlAverage, 0.25 / wlAverage},
                 {-0.25, 0.25, 0.25, -0.25}
         };
         hardwareMap.setActive(false);
     }
 
-    public void initialize(){
+    public void initialize() {
         //backServoArm = (Rectangle)displayGroup.getChildren().get(8);
         backServoArm.getTransforms().add(new Rotate(0, 37.5, 67.5));
     }
 
-    protected void createHardwareMap(){
+    protected void createHardwareMap() {
         motorType = MotorType.Neverest40;
         encoderMotorType = MotorType.Neverest40;
         hardwareMap = new HardwareMap();
-        String[] motorNames = new String[] {"back_left_motor", "front_left_motor", "front_right_motor", "back_right_motor"};
-        for (String name: motorNames) hardwareMap.put(name, new DcMotorExImpl(motorType));
+        String[] motorNames = new String[]{"back_left_motor", "front_left_motor", "front_right_motor", "back_right_motor"};
+        for (String name : motorNames) hardwareMap.put(name, new DcMotorExImpl(motorType));
         String[] distNames = new String[]{"front_distance", "left_distance", "back_distance", "right_distance"};
-        for (String name: distNames) hardwareMap.put(name, controller.new DistanceSensorImpl());
+        for (String name : distNames) hardwareMap.put(name, controller.new DistanceSensorImpl());
         //hardwareMap.put("gyro_sensor", controller.new GyroSensorImpl());
         hardwareMap.put("imu", new BNO055IMUImpl(this, 10));
         hardwareMap.put("color_sensor", controller.new ColorSensorImpl());
         hardwareMap.put("back_servo", new ServoImpl());
-        String[] encoderNames = new String[] {"enc_right", "enc_left", "enc_x"};
-        for (String name: encoderNames) hardwareMap.put(name, new DeadWheelEncoder(encoderMotorType));
+        String[] encoderNames = new String[]{"enc_right", "enc_left", "enc_x"};
+        for (String name : encoderNames) hardwareMap.put(name, new DeadWheelEncoder(encoderMotorType));
     }
 
-    public synchronized void updateStateAndSensors(double millis){
+    public synchronized void updateStateAndSensors(double millis) {
 
         double[] deltaPos = new double[4];
         double[] w = new double[4];
@@ -136,9 +136,9 @@ public class EncoderBot extends VirtualBot {
             if (i < 2) w[i] = -w[i];
         }
 
-        double[] robotDeltaPos = new double[] {0,0,0,0};
-        for (int i=0; i<4; i++){
-            for (int j = 0; j<4; j++){
+        double[] robotDeltaPos = new double[]{0, 0, 0, 0};
+        for (int i = 0; i < 4; i++) {
+            for (int j = 0; j < 4; j++) {
                 robotDeltaPos[i] += tWR[i][j] * w[j];
             }
         }
@@ -159,7 +159,7 @@ public class EncoderBot extends VirtualBot {
         headingRadians += headingChange;
 
         //Need to account for possibility that robot has run in to the wall
-        if (x >  (halfFieldWidth - halfBotWidth)) x = halfFieldWidth - halfBotWidth;
+        if (x > (halfFieldWidth - halfBotWidth)) x = halfFieldWidth - halfBotWidth;
         else if (x < (halfBotWidth - halfFieldWidth)) x = halfBotWidth - halfFieldWidth;
         if (y > (halfFieldWidth - halfBotWidth)) y = halfFieldWidth - halfBotWidth;
         else if (y < (halfBotWidth - halfFieldWidth)) y = halfBotWidth - halfFieldWidth;
@@ -191,21 +191,21 @@ public class EncoderBot extends VirtualBot {
 
         final double piOver2 = Math.PI / 2.0;
 
-        for (int i = 0; i<4; i++){
+        for (int i = 0; i < 4; i++) {
             double sensorHeading = AngleUtils.normalizeRadians(headingRadians + i * piOver2);
-            distanceSensors[i].updateDistance( x - halfBotWidth * Math.sin(sensorHeading),
+            distanceSensors[i].updateDistance(x - halfBotWidth * Math.sin(sensorHeading),
                     y + halfBotWidth * Math.cos(sensorHeading), sensorHeading);
         }
 
     }
 
-    public synchronized void updateDisplay(){
+    public synchronized void updateDisplay() {
         super.updateDisplay();
-        ((Rotate)backServoArm.getTransforms().get(0)).setAngle(-180.0 * servo.getInternalPosition());
+        ((Rotate) backServoArm.getTransforms().get(0)).setAngle(-180.0 * servo.getInternalPosition());
     }
 
-    public void powerDownAndReset(){
-        for (int i=0; i<4; i++) motors[i].stopAndReset();
+    public void powerDownAndReset() {
+        for (int i = 0; i < 4; i++) motors[i].stopAndReset();
         rightEncoder.stopAndReset();
         leftEncoder.stopAndReset();
         xEncoder.stopAndReset();

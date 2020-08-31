@@ -11,22 +11,38 @@ import javafx.scene.shape.Circle;
 
 public class VirtualGamePadController {
 
-    @FXML StackPane joyStickLeftPane;
-    @FXML StackPane joyStickRightPane;
-    @FXML Circle joyStickLeftHandle;
-    @FXML Circle joyStickRightHandle;
-    @FXML Button btnX;
-    @FXML Button btnY;
-    @FXML Button btnA;
-    @FXML Button btnB;
-    @FXML Button btnDU;
-    @FXML Button btnDL;
-    @FXML Button btnDR;
-    @FXML Button btnDD;
-    @FXML Button btnLB;
-    @FXML Button btnRB;
-    @FXML Slider sldLeft;
-    @FXML Slider sldRight;
+    @FXML
+    StackPane joyStickLeftPane;
+    @FXML
+    StackPane joyStickRightPane;
+    @FXML
+    Circle joyStickLeftHandle;
+    @FXML
+    Circle joyStickRightHandle;
+    @FXML
+    Button btnX;
+    @FXML
+    Button btnY;
+    @FXML
+    Button btnA;
+    @FXML
+    Button btnB;
+    @FXML
+    Button btnDU;
+    @FXML
+    Button btnDL;
+    @FXML
+    Button btnDR;
+    @FXML
+    Button btnDD;
+    @FXML
+    Button btnLB;
+    @FXML
+    Button btnRB;
+    @FXML
+    Slider sldLeft;
+    @FXML
+    Slider sldRight;
 
     volatile float left_stick_x = 0;
     volatile float left_stick_y = 0;
@@ -51,47 +67,47 @@ public class VirtualGamePadController {
     ChangeListener<Number> sliderChangeListener = new ChangeListener<Number>() {
         @Override
         public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-            leftTrigger = (float)sldLeft.getValue();
-            rightTrigger = (float)sldRight.getValue();
+            leftTrigger = (float) sldLeft.getValue();
+            rightTrigger = (float) sldRight.getValue();
         }
     };
 
-    public void initialize(){
+    public void initialize() {
         System.out.println("Initializing virtual gamepad");
         sldLeft.valueProperty().addListener(sliderChangeListener);
         sldRight.valueProperty().addListener(sliderChangeListener);
     }
 
-    void setVirtualRobotController(VirtualRobotController vrController){
+    void setVirtualRobotController(VirtualRobotController vrController) {
         virtualRobotController = vrController;
     }
 
     @FXML
-    private void handleJoystickDrag(MouseEvent arg){
+    private void handleJoystickDrag(MouseEvent arg) {
         if (!virtualRobotController.getOpModeInitialized()) return;
-        float x = (float)Math.max(10, Math.min(110, arg.getX()));
-        float y = (float)Math.max(10, Math.min(110, arg.getY()));
-        if (arg.getSource() == joyStickLeftPane){
-            joyStickLeftHandle.setTranslateX(x-10);
-            joyStickLeftHandle.setTranslateY(y-10);
+        float x = (float) Math.max(10, Math.min(110, arg.getX()));
+        float y = (float) Math.max(10, Math.min(110, arg.getY()));
+        if (arg.getSource() == joyStickLeftPane) {
+            joyStickLeftHandle.setTranslateX(x - 10);
+            joyStickLeftHandle.setTranslateY(y - 10);
             left_stick_x = (x - 60.0f) / 50.0f;
             left_stick_y = (y - 60.0f) / 50.0f;
-        }
-        else if (arg.getSource() == joyStickRightPane){
-            joyStickRightHandle.setTranslateX(x-10);
-            joyStickRightHandle.setTranslateY(y-10);
+        } else if (arg.getSource() == joyStickRightPane) {
+            joyStickRightHandle.setTranslateX(x - 10);
+            joyStickRightHandle.setTranslateY(y - 10);
             right_stick_x = (x - 60.0f) / 50.0f;
             right_stick_y = (y - 60.0f) / 50.0f;
         }
     }
 
     @FXML
-    private void handleGamePadButtonMouseEvent(MouseEvent arg){
+    private void handleGamePadButtonMouseEvent(MouseEvent arg) {
         if (!virtualRobotController.getOpModeInitialized()) return;
-        Button btn = (Button)arg.getSource();
+        Button btn = (Button) arg.getSource();
         boolean result;
 
-        if (arg.getEventType() == MouseEvent.MOUSE_EXITED || arg.getEventType() == MouseEvent.MOUSE_RELEASED) result = false;
+        if (arg.getEventType() == MouseEvent.MOUSE_EXITED || arg.getEventType() == MouseEvent.MOUSE_RELEASED)
+            result = false;
         else if (arg.getEventType() == MouseEvent.MOUSE_PRESSED) result = true;
         else return;
 
@@ -107,7 +123,7 @@ public class VirtualGamePadController {
         else if (btn == btnRB) rBPressed = result;
     }
 
-    void resetGamePad(){
+    void resetGamePad() {
         left_stick_y = 0;
         left_stick_x = 0;
         right_stick_x = 0;
@@ -151,7 +167,7 @@ public class VirtualGamePadController {
         public final float left_trigger;
         public final float right_trigger;
 
-        public ControllerState(){
+        public ControllerState() {
             leftStickX = VirtualGamePadController.this.left_stick_x;
             leftStickY = VirtualGamePadController.this.left_stick_y;
             rightStickX = VirtualGamePadController.this.right_stick_x;
@@ -171,7 +187,7 @@ public class VirtualGamePadController {
         }
     }
 
-    ControllerState getState(){
+    ControllerState getState() {
         return new ControllerState();
     }
 

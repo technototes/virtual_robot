@@ -8,6 +8,7 @@ public class SimpleServoSubsystem extends ServoSubsystem<Servo> {
     public SimpleServoSubsystem(Servo s1, Servo... s2) {
         super(new ServoGroup(s1, s2));
     }
+
     public SimpleServoSubsystem(Servo s1) {
         super(s1);
     }

@@ -38,13 +38,12 @@ package com.qualcomm.robotcore.util;
  *
  * @see <a href="http://en.wikipedia.org/wiki/Algorithms_for_calculating_variance#On-line_algorithm">Wikipedia</a>
  */
-public class Statistics
-{
+public class Statistics {
     //----------------------------------------------------------------------------------------------
     // State
     //----------------------------------------------------------------------------------------------
 
-    int    n;
+    int n;
     double mean;
     double m2;
 
@@ -52,8 +51,7 @@ public class Statistics
     // Construction
     //----------------------------------------------------------------------------------------------
 
-    public Statistics()
-    {
+    public Statistics() {
         this.clear();
     }
 
@@ -63,37 +61,37 @@ public class Statistics
 
     /**
      * Returns the current number of samples
+     *
      * @return the number of samples
      */
-    public int getCount()
-    {
+    public int getCount() {
         return n;
     }
 
     /**
      * Returns the mean of the current set of samples
+     *
      * @return the mean of the samples
      */
-    public double getMean()
-    {
+    public double getMean() {
         return mean;
     }
 
     /**
      * Returns the sample variance of the current set of samples
+     *
      * @return the variance of the samples
      */
-    public double getVariance()
-    {
+    public double getVariance() {
         return m2 / (n - 1);
     }
 
     /**
      * Returns the sample standard deviation of the current set of samples
+     *
      * @return the standard deviation of the samples
      */
-    public double getStandardDeviation()
-    {
+    public double getStandardDeviation() {
         return Math.sqrt(this.getVariance());
     }
 
@@ -104,32 +102,31 @@ public class Statistics
     /**
      * Resets the statistics to an empty state
      */
-    public void clear()
-    {
-        n    = 0;
+    public void clear() {
+        n = 0;
         mean = 0;
-        m2   = 0;
+        m2 = 0;
     }
 
     /**
      * Adds a new sample to the statistics
+     *
      * @param x the sample to add
      */
-    public void add(double x)
-    {
+    public void add(double x) {
         n = n + 1;
         double delta = x - mean;
         mean = mean + delta / n;
-        m2 = m2 + delta*(x - mean);
+        m2 = m2 + delta * (x - mean);
     }
 
     /**
      * Removes a sample from the statistics
+     *
      * @param x the sample to remove
      */
-    public void remove(double x)
-    {
-        int nPrev = n-1;
+    public void remove(double x) {
+        int nPrev = n - 1;
         double delta = x - mean;
         double deltaPrev = n * delta / nPrev;
         m2 = m2 - deltaPrev * delta;

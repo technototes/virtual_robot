@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.teamcode.newcode.commands.lift;
 
 import com.technototes.library.command.Command;
-
 import org.firstinspires.ftc.teamcode.newcode.subsystems.LiftSubsystem;
 
 public class LiftToLastBrickHeightCommand extends Command {
@@ -15,7 +14,9 @@ public class LiftToLastBrickHeightCommand extends Command {
 
     @Override
     public void init() {
-        targetHeight = subsystem.lastPlacedBrickHeight+1;
+        int temp = subsystem.lastPlacedBrickHeight + 1;
+        targetHeight = (temp >= 0 && temp < subsystem.liftPositions.length) ?
+                temp : subsystem.getHeight();
     }
 
     @Override

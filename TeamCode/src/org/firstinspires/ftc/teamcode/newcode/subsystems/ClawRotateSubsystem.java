@@ -6,19 +6,23 @@ import com.technototes.library.subsystem.servo.ServoSubsystem;
 public class ClawRotateSubsystem extends ServoSubsystem {
     public ClawRotation currentRotation;
     public Servo servo;
-    public ClawRotateSubsystem(Servo s){
+
+    public ClawRotateSubsystem(Servo s) {
         super(s);
         servo = s;
         currentRotation = ClawRotation.CENTER;
     }
-    public enum ClawRotation{
+
+    public enum ClawRotation {
         LEFT(0), CENTER(0.5), RIGHT(1);
         public double pos;
-        ClawRotation(double servoPos){
+
+        ClawRotation(double servoPos) {
             pos = servoPos;
         }
     }
-    public void setClawRotation(ClawRotation c){
+
+    public void setClawRotation(ClawRotation c) {
         currentRotation = c;
         servo.setPosition(c.pos);
     }

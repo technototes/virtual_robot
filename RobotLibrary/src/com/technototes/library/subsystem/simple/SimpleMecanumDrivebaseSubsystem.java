@@ -10,6 +10,7 @@ public class SimpleMecanumDrivebaseSubsystem extends MecanumDrivebaseSubsystem<M
     public SimpleMecanumDrivebaseSubsystem(Motor<DcMotor> flMotor, Motor<DcMotor> frMotor, Motor<DcMotor> rlMotor, Motor<DcMotor> rrMotor) {
         super(flMotor, frMotor, rlMotor, rrMotor);
     }
+
     public SimpleMecanumDrivebaseSubsystem(DoubleSupplier d, Motor<DcMotor> flMotor, Motor<DcMotor> frMotor, Motor<DcMotor> rlMotor, Motor<DcMotor> rrMotor) {
         super(d, flMotor, frMotor, rlMotor, rrMotor);
     }

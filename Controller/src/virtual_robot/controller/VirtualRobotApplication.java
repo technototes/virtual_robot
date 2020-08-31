@@ -17,9 +17,9 @@ public class VirtualRobotApplication extends Application {
     private static VirtualRobotController controllerHandle;
 
     @Override
-    public void start(Stage primaryStage) throws Exception{
+    public void start(Stage primaryStage) throws Exception {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("virtual_robot.fxml"));
-        Parent root = (BorderPane)loader.load();
+        Parent root = (BorderPane) loader.load();
         controllerHandle = loader.getController();
         primaryStage.setTitle("Virtual Robot");
         primaryStage.setScene(new Scene(root));
@@ -44,7 +44,9 @@ public class VirtualRobotApplication extends Application {
         controllerHandle.gamePadHelper.quit();
     }
 
-    public static VirtualRobotController getControllerHandle(){return controllerHandle;}
+    public static VirtualRobotController getControllerHandle() {
+        return controllerHandle;
+    }
 
 
     public static void main(String[] args) {

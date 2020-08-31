@@ -16,13 +16,14 @@ public class GyroSensorImpl implements GyroSensor {
 
     /**
      * For internal use only.
+     *
      * @param bot
      */
-    public GyroSensorImpl(VirtualBot bot){
+    public GyroSensorImpl(VirtualBot bot) {
         this.bot = bot;
     }
 
-    public GyroSensorImpl(VirtualBot bot, int latencyMillis){
+    public GyroSensorImpl(VirtualBot bot, int latencyMillis) {
         this.bot = bot;
         latencyNanos = latencyMillis * 1000000;
     }
@@ -30,7 +31,7 @@ public class GyroSensorImpl implements GyroSensor {
     /**
      * Initialize the gyro sensor
      */
-    public synchronized void init(){
+    public synchronized void init() {
         initialized = true;
         heading = initialHeading = bot.getHeadingRadians() * 180.0 / Math.PI;
     }
@@ -38,7 +39,7 @@ public class GyroSensorImpl implements GyroSensor {
     /**
      * For internal use only.
      */
-    public synchronized void deinit(){
+    public synchronized void deinit() {
         initialized = false;
         initialHeading = 0.0;
         heading = 0.0;
@@ -46,23 +47,24 @@ public class GyroSensorImpl implements GyroSensor {
 
     /**
      * Get heading in degrees (-180 to 180)
+     *
      * @return heading in degrees (-180 to 180)
      */
-    public synchronized double getHeading(){
-        if (initialized){
+    public synchronized double getHeading() {
+        if (initialized) {
             double result = heading - initialHeading;
             if (result < -180.0) result += 360.0;
             else if (result > 180.0) result -= 360.0;
             return result;
-        }
-        else return 0.0;
+        } else return 0.0;
     }
 
     /**
      * For internal use only.
+     *
      * @param heading
      */
-    public synchronized void updateHeading(double heading){
+    public synchronized void updateHeading(double heading) {
         long nanos = System.nanoTime();
         if (nanos < (prevNanos + latencyNanos)) return;
         this.heading = heading;

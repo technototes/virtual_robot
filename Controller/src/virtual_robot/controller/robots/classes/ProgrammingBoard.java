@@ -27,7 +27,7 @@ import virtual_robot.util.AngleUtils;
 /**
  * For internal use only. Represents a robot with two standard wheels, color sensor, four distance sensors,
  * a Gyro Sensor, and a Servo-controlled arm on the back.
- *
+ * <p>
  * TwoWheelBot is the controller class for the "two_wheel_bot.fxml" markup file.
  */
 @BotConfig(name = "Programming Board", filename = "programming_board")
@@ -42,16 +42,26 @@ public class ProgrammingBoard extends VirtualBot {
     private AnalogInput analogInput = null;
     private PassiveDistanceSensorImpl distanceSensor = null;
 
-    @FXML private Group propGroup;
-    @FXML private Group servoArmGroup;
-    @FXML private Button btnTouch;
-    @FXML private Slider sldPot;
-    @FXML private Slider sldRed;
-    @FXML private Slider sldGreen;
-    @FXML private Slider sldBlue;
-    @FXML private Circle circleColor;
-    @FXML private Rectangle rectBoard;
-    @FXML private Slider sldDist;
+    @FXML
+    private Group propGroup;
+    @FXML
+    private Group servoArmGroup;
+    @FXML
+    private Button btnTouch;
+    @FXML
+    private Slider sldPot;
+    @FXML
+    private Slider sldRed;
+    @FXML
+    private Slider sldGreen;
+    @FXML
+    private Slider sldBlue;
+    @FXML
+    private Circle circleColor;
+    @FXML
+    private Rectangle rectBoard;
+    @FXML
+    private Slider sldDist;
 
     private Rotate servoArmGroupRotate = new Rotate(0, 25, 25);
     private Rotate propGroupRotate = new Rotate(0, 50, 50);
@@ -74,34 +84,34 @@ public class ProgrammingBoard extends VirtualBot {
     private ChangeListener<Number> sliderColorChangeListener = new ChangeListener<Number>() {
         @Override
         public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-            red = (int)sldRed.getValue();
-            green = (int)sldGreen.getValue();
-            blue = (int)sldBlue.getValue();
+            red = (int) sldRed.getValue();
+            green = (int) sldGreen.getValue();
+            blue = (int) sldBlue.getValue();
             Platform.runLater(new Runnable() {
                 @Override
                 public void run() {
-                    circleColor.setFill(Color.color((double)red/255.0, (double)green/255.0, (double)blue/255.0));
+                    circleColor.setFill(Color.color((double) red / 255.0, (double) green / 255.0, (double) blue / 255.0));
                 }
             });
         }
     };
 
 
-    public ProgrammingBoard(){
+    public ProgrammingBoard() {
         super();
         hardwareMap.setActive(true);
-        motor = (DcMotorExImpl)hardwareMap.get(DcMotorEx.class, "motor");
+        motor = (DcMotorExImpl) hardwareMap.get(DcMotorEx.class, "motor");
         imu = (BNO055IMUImpl) hardwareMap.get(BNO055IMU.class, "imu");
-        colorSensor = (PassiveColorSensorImpl)hardwareMap.colorSensor.get("sensor_color_distance");
-        servo = (ServoImpl)hardwareMap.servo.get("servo");
+        colorSensor = (PassiveColorSensorImpl) hardwareMap.colorSensor.get("sensor_color_distance");
+        servo = (ServoImpl) hardwareMap.servo.get("servo");
         digitalChannel = (DigitalChannelImpl) hardwareMap.get(DigitalChannel.class, "touch_sensor");
         analogInput = hardwareMap.get(AnalogInput.class, "pot");
-        distanceSensor = (PassiveDistanceSensorImpl)hardwareMap.get(PassiveDistanceSensorImpl.class, "sensor_color_distance");
+        distanceSensor = (PassiveDistanceSensorImpl) hardwareMap.get(PassiveDistanceSensorImpl.class, "sensor_color_distance");
         hardwareMap.setActive(false);
         System.out.println("Exiting ProgrammingBoard constructor");
     }
 
-    public void initialize(){
+    public void initialize() {
         System.out.println("ProgrammingBoard initialize");
         propGroup.getTransforms().add(propGroupRotate);
         servoArmGroup.getTransforms().add(servoArmGroupRotate);
@@ -114,7 +124,7 @@ public class ProgrammingBoard extends VirtualBot {
         sldBlue.valueProperty().addListener(sliderColorChangeListener);
     }
 
-    protected void createHardwareMap(){
+    protected void createHardwareMap() {
         motorType = MotorType.Neverest40;
         hardwareMap = new HardwareMap();
         hardwareMap.put("motor", new DcMotorExImpl(motorType));
@@ -127,7 +137,7 @@ public class ProgrammingBoard extends VirtualBot {
                 50, 250));
     }
 
-    public synchronized void updateStateAndSensors(double millis){
+    public synchronized void updateStateAndSensors(double millis) {
         propAngleDegrees = AngleUtils.normalizeDegrees(propAngleDegrees +
                 motor.update(millis) * 360.0 / motor.MOTOR_TYPE.TICKS_PER_ROTATION);
         analogInput.update(sldPot.getValue());
@@ -137,13 +147,13 @@ public class ProgrammingBoard extends VirtualBot {
         distanceSensor.update(sldDist.getValue());
     }
 
-    public synchronized void updateDisplay(){
+    public synchronized void updateDisplay() {
         super.updateDisplay();
         servoArmGroupRotate.setAngle(-180.0 * servo.getInternalPosition());
         propGroupRotate.setAngle(propAngleDegrees);
     }
 
-    public synchronized void powerDownAndReset(){
+    public synchronized void powerDownAndReset() {
         headingRadians = 0;
         motor.stopAndReset();
         imu.close();
@@ -161,9 +171,8 @@ public class ProgrammingBoard extends VirtualBot {
     /**
      * Because the programming board will be 500x500 pixels (rather than 75x75), it is necessary to override the
      * setUpDisplayGroup method.
-     *
      */
-    protected void setUpDisplayGroup(Group group){
+    protected void setUpDisplayGroup(Group group) {
 
         displayGroup = group;
 
@@ -199,27 +208,27 @@ public class ProgrammingBoard extends VirtualBot {
          */
         displayGroup.getTransforms().add(new Translate(0, 0));
         displayGroup.getTransforms().add(new Rotate(0, halfFieldWidth, halfFieldWidth));
-        displayGroup.getTransforms().add(new Scale(botWidth/75.0, botWidth/75.0, 0, 0));
+        displayGroup.getTransforms().add(new Scale(botWidth / 75.0, botWidth / 75.0, 0, 0));
 
         fieldPane.getChildren().add(displayGroup);
     }
 
     @FXML
-    private synchronized void handleMouseEvents(MouseEvent event){
-        if (event.getSource() == btnTouch){
-            if (event.getEventType() == MouseEvent.MOUSE_PRESSED){
+    private synchronized void handleMouseEvents(MouseEvent event) {
+        if (event.getSource() == btnTouch) {
+            if (event.getEventType() == MouseEvent.MOUSE_PRESSED) {
                 btnTouchPushed = true;
-            } else if (event.getEventType() == MouseEvent.MOUSE_RELEASED || event.getEventType() == MouseEvent.MOUSE_EXITED){
+            } else if (event.getEventType() == MouseEvent.MOUSE_RELEASED || event.getEventType() == MouseEvent.MOUSE_EXITED) {
                 btnTouchPushed = false;
             }
-        } else if (event.getSource() == rectBoard){
-            if (event.getEventType() == MouseDragEvent.DRAG_DETECTED){
+        } else if (event.getSource() == rectBoard) {
+            if (event.getEventType() == MouseDragEvent.DRAG_DETECTED) {
                 initMouseX = event.getSceneX() - fieldCenterX;
                 initMouseY = fieldCenterY - event.getSceneY();
                 initMouseAngle = Math.atan2(initMouseY, initMouseX);
                 initHeading = headingRadians;
                 rectBoard.startFullDrag();
-            } else if (event.getEventType() == MouseDragEvent.MOUSE_DRAG_OVER){
+            } else if (event.getEventType() == MouseDragEvent.MOUSE_DRAG_OVER) {
                 double newMouseX = event.getSceneX() - fieldCenterX;
                 double newMouseY = fieldCenterY - event.getSceneY();
                 double newMouseAngle = Math.atan2(newMouseY, newMouseX);
@@ -237,12 +246,13 @@ public class ProgrammingBoard extends VirtualBot {
     }
 
 
-
     /**
      * ProgrammingBoard doesn't support positioning with mouse click; override the VirtualBot method
+     *
      * @param arg
      */
     @Override
-    public synchronized void positionWithMouseClick(MouseEvent arg){}
+    public synchronized void positionWithMouseClick(MouseEvent arg) {
+    }
 
 }

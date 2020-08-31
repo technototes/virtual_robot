@@ -33,7 +33,7 @@ public abstract class CommandOpMode extends LinearOpMode {
         opModeState = OpModeState.FINISHED;
         end();
         timer.reset();
-            CommandScheduler.getEndInstance().run();
+        CommandScheduler.getEndInstance().run();
         CommandScheduler.getEndInstance().runLastTime();
     }
 

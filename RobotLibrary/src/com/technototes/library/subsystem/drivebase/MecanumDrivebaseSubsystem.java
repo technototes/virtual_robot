@@ -27,14 +27,14 @@ public abstract class MecanumDrivebaseSubsystem<T extends Motor> extends Omnidir
         double headingRad = Math.toRadians(gyroAngle);
         double angle = -Math.atan2(y, x);
 
-        angle+=headingRad-Math.PI/4;
-        x=Math.cos(angle)*speed;
-        y=Math.sin(angle)*speed;
+        angle += headingRad - Math.PI / 4;
+        x = Math.cos(angle) * speed;
+        y = Math.sin(angle) * speed;
 
-        double powerCompY = -(x+y);
-        double powerCompX = x-y;
+        double powerCompY = -(x + y);
+        double powerCompX = x - y;
 
-        speed = Range.clip(speed+Math.abs(rotation), 0, 1);
+        speed = Range.clip(speed + Math.abs(rotation), 0, 1)*driveSpeed.getSpeed();
 
         double flPower = powerCompY - powerCompX - rotation;
         double frPower = -powerCompY - powerCompX - rotation;
@@ -42,10 +42,10 @@ public abstract class MecanumDrivebaseSubsystem<T extends Motor> extends Omnidir
         double rrPower = -powerCompY + powerCompX - rotation;
 
         double scale = getSpeedScale(flPower, frPower, rlPower, rrPower);
-        flMotor.setSpeed(flPower*speed*scale);
-        frMotor.setSpeed(frPower*speed*scale);
-        rlMotor.setSpeed(rlPower*speed*scale);
-        rrMotor.setSpeed(rrPower*speed*scale);
+        flMotor.setSpeed(flPower * speed * scale);
+        frMotor.setSpeed(frPower * speed * scale);
+        rlMotor.setSpeed(rlPower * speed * scale);
+        rrMotor.setSpeed(rrPower * speed * scale);
     }
 
     private static double getSpeedScale(double fl, double fr, double rl, double rr) {

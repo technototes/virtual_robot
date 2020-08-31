@@ -8,36 +8,56 @@ import java.util.function.BooleanSupplier;
 
 public class ButtonGamepadComponent extends Trigger implements BooleanSupplier {
     protected BooleanSupplier booleanSupplier;
-    protected boolean onoff, pastState1 = false, pastState2 = false, normalToggle = false, inverseToggle = true;
+    protected boolean pastStatePress = false, pastStateRelease = false, pastStatetogglePress = false, pastStateToggleRelease = false, togglePress = true, toggleRelease = false;
 
     public ButtonGamepadComponent(BooleanSupplier b) {
         booleanSupplier = b;
-        onoff = b.getAsBoolean();
     }
 
-    private boolean uponPress() {
+    private boolean uponPressPress() {
         boolean b = false;
-        if(getAsBoolean() && (pastState1 != getAsBoolean())){
-            b=true;
-            ///System.out.println("press");
+        if (getAsBoolean() && (pastStatePress != getAsBoolean())) {
+            b = true;
+            //System.out.println("press");
         }
-        pastState1 = getAsBoolean();
+        pastStatePress = getAsBoolean();
         return b;
     }
 
+    private boolean uponPressToggleRelease() {
+        boolean b = false;
+        if (getAsBoolean() && (pastStateToggleRelease != getAsBoolean())) {
+            b = true;
+
+        }
+        pastStateToggleRelease = getAsBoolean();
+        return b;
+    }
+
+    private boolean uponPressTogglePress() {
+        boolean b = false;
+        if (getAsBoolean() && (pastStatetogglePress != getAsBoolean())) {
+            b = true;
+
+        }
+        pastStatetogglePress = getAsBoolean();
+        return b;
+    }
+
+
     private boolean uponRelease() {
         boolean b = false;
-        if(!getAsBoolean() && (pastState2 != getAsBoolean())){
-            b=true;
-           // System.out.println("release");
+        if (!getAsBoolean() && (pastStateRelease != getAsBoolean())) {
+            b = true;
+            // System.out.println("release");
         }
-        pastState2 = getAsBoolean();
+        pastStateRelease = getAsBoolean();
         return b;
     }
 
     @Override
     public ButtonGamepadComponent whenActivated(Command c) {
-        CommandScheduler.getRunInstance().schedule(this::uponPress, c);
+        CommandScheduler.getRunInstance().schedule(this::uponPressPress, c);
         return this;
     }
 
@@ -61,31 +81,37 @@ public class ButtonGamepadComponent extends Trigger implements BooleanSupplier {
 
     @Override
     public ButtonGamepadComponent toggleWhenActivated(Command c) {
-        CommandScheduler.getRunInstance().schedule(() -> (normalToggle = uponPress() ? !normalToggle : normalToggle) && uponPress(), c);
+        CommandScheduler.getRunInstance().schedule(() -> getToggle(), c);
         return this;
     }
+
 
     @Override
     public ButtonGamepadComponent toggleWhenDeactivated(Command c) {
-        CommandScheduler.getRunInstance().schedule(() -> (inverseToggle = uponRelease() ? !inverseToggle : inverseToggle) && uponRelease(), c);
-        return this;
-    }
-
-    @Override
-    public ButtonGamepadComponent toggleWhileActivated(Command c) {
-        CommandScheduler.getRunInstance().schedule(() -> normalToggle = uponPress() ? !normalToggle : normalToggle, c);
-        return this;
-    }
-
-    @Override
-    public ButtonGamepadComponent toggleWhileDeactivated(Command c) {
-        CommandScheduler.getRunInstance().schedule(() -> inverseToggle = uponRelease() ? !inverseToggle : inverseToggle, c);
+        CommandScheduler.getRunInstance().schedule(() -> getInverseToggle(), c);
         return this;
     }
 
     @Override
     public boolean getAsBoolean() {
         return booleanSupplier.getAsBoolean();
+    }
+
+    public boolean getToggle(){
+        boolean r = false;
+        if(uponPressTogglePress()   ){
+            r = togglePress;
+            togglePress = !togglePress;
+        }
+        return r;
+    }
+    public boolean getInverseToggle(){
+        boolean r = false;
+        if(uponPressToggleRelease()){
+            r = toggleRelease;
+            toggleRelease = !toggleRelease;
+        }
+        return r;
     }
 
 }

@@ -18,6 +18,7 @@ public class EncodedMotorSubsystem extends MotorSubsystem<EncodedMotor> implemen
     public boolean setPosition(double ticks) {
         return setPosition(ticks, maxSpeed);
     }
+
     public boolean setPosition(double ticks, double speed) {
         boolean b = true;
         for (EncodedMotor s : devices) {

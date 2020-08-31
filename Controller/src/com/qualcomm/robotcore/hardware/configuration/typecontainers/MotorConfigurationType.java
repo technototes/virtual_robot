@@ -58,66 +58,54 @@ public final class MotorConfigurationType {
     // Accessing
     //----------------------------------------------------------------------------------------------
 
-    public double getTicksPerRev()
-    {
+    public double getTicksPerRev() {
         return ticksPerRev;
     }
 
-    public double getAchieveableMaxTicksPerSecond()
-    {
+    public double getAchieveableMaxTicksPerSecond() {
         final double encoderTicksPerRev = this.getTicksPerRev();
-        final double maxRPM             = this.getMaxRPM() * this.getAchieveableMaxRPMFraction();
-        final double secondsPerMinute   = 60;
+        final double maxRPM = this.getMaxRPM() * this.getAchieveableMaxRPMFraction();
+        final double secondsPerMinute = 60;
         return encoderTicksPerRev * maxRPM / secondsPerMinute;
     }
 
-    public int getAchieveableMaxTicksPerSecondRounded()
-    {
-        return (int)Math.round(getAchieveableMaxTicksPerSecond());
+    public int getAchieveableMaxTicksPerSecondRounded() {
+        return (int) Math.round(getAchieveableMaxTicksPerSecond());
     }
 
-    public void setTicksPerRev(double ticksPerRev)
-    {
+    public void setTicksPerRev(double ticksPerRev) {
         this.ticksPerRev = ticksPerRev;
     }
 
-    public double getGearing()
-    {
+    public double getGearing() {
         return gearing;
     }
 
-    public void setGearing(double gearing)
-    {
+    public void setGearing(double gearing) {
         this.gearing = gearing;
     }
 
-    public double getMaxRPM()
-    {
+    public double getMaxRPM() {
         return maxRPM;
     }
 
-    public void setMaxRPM(double maxRPM)
-    {
+    public void setMaxRPM(double maxRPM) {
         this.maxRPM = maxRPM;
     }
 
-    public double getAchieveableMaxRPMFraction()
-    {
+    public double getAchieveableMaxRPMFraction() {
         return achieveableMaxRPMFraction;
     }
 
-    public void setAchieveableMaxRPMFraction(double achieveableMaxRPMFraction)
-    {
+    public void setAchieveableMaxRPMFraction(double achieveableMaxRPMFraction) {
         this.achieveableMaxRPMFraction = achieveableMaxRPMFraction;
     }
 
-    public Rotation getOrientation()
-    {
+    public Rotation getOrientation() {
         return orientation;
     }
 
-    public void setOrientation(Rotation orientation)
-    {
+    public void setOrientation(Rotation orientation) {
         this.orientation = orientation;
     }
 
@@ -125,11 +113,11 @@ public final class MotorConfigurationType {
     // Construction
     //----------------------------------------------------------------------------------------------
 
-    public MotorConfigurationType(MotorType motorType){
+    public MotorConfigurationType(MotorType motorType) {
         ticksPerRev = motorType.TICKS_PER_ROTATION;
         gearing = motorType.GEARING;
         achieveableMaxRPMFraction = motorType.ACHIEVABLE_MAX_RPM_FRACTION;
-        orientation = motorType.REVERSED? Rotation.CCW : Rotation.CW;
+        orientation = motorType.REVERSED ? Rotation.CCW : Rotation.CW;
 
         //This may seem a little backward, but note that MotorType.MAX_TICKS_PER_SECOND refers to the
         //maximum ticks per second that can be achieved in RUN_WITH_ENCODER mode

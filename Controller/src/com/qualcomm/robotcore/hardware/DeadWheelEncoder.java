@@ -38,7 +38,7 @@ public class DeadWheelEncoder implements DcMotorEx {
     public synchronized void setMode(RunMode mode) {
         this.mode = mode;
         power = 0.0;
-        if (mode == RunMode.STOP_AND_RESET_ENCODER){
+        if (mode == RunMode.STOP_AND_RESET_ENCODER) {
             encoderBasePosition = actualPosition;
         }
     }
@@ -50,16 +50,20 @@ public class DeadWheelEncoder implements DcMotorEx {
 
     @Override
     public synchronized int getCurrentPosition() {
-        int result = (int)Math.floor(actualPosition - encoderBasePosition);
+        int result = (int) Math.floor(actualPosition - encoderBasePosition);
         return direction == Direction.FORWARD && MOTOR_TYPE.REVERSED ||
                 direction == Direction.REVERSE && !MOTOR_TYPE.REVERSED ? -result : result;
     }
 
     @Override
-    public synchronized void setTargetPosition(int pos) { targetPosition = pos; }
+    public synchronized void setTargetPosition(int pos) {
+        targetPosition = pos;
+    }
 
     @Override
-    public synchronized int getTargetPosition() { return targetPosition; }
+    public synchronized int getTargetPosition() {
+        return targetPosition;
+    }
 
     @Override
     public synchronized boolean isBusy() {
@@ -67,10 +71,14 @@ public class DeadWheelEncoder implements DcMotorEx {
     }
 
     @Override
-    public synchronized void setDirection(Direction direction) { this.direction = direction; }
+    public synchronized void setDirection(Direction direction) {
+        this.direction = direction;
+    }
 
     @Override
-    public synchronized Direction getDirection() { return direction; }
+    public synchronized Direction getDirection() {
+        return direction;
+    }
 
     @Override
     public synchronized void setPower(double power) {
@@ -84,9 +92,10 @@ public class DeadWheelEncoder implements DcMotorEx {
 
     /**
      * Update position of the deadwheel encoder
+     *
      * @param radians Incremental clockwise rotation of the dead wheel in radians
      */
-    public synchronized void update( double radians, double milliseconds ){
+    public synchronized void update(double radians, double milliseconds) {
         final double TWO_PI = 2.0 * Math.PI;
         double positionChange = radians * MOTOR_TYPE.TICKS_PER_ROTATION / TWO_PI;
         double tempVelocity = radians / milliseconds * 1000.0;
@@ -99,15 +108,20 @@ public class DeadWheelEncoder implements DcMotorEx {
     }
 
     //For internal use only: for stopping and resetting motor between op mode runs
-    public synchronized void stopAndReset(){
+    public synchronized void stopAndReset() {
         power = 0.0;
         actualPosition = 0.0;
         encoderBasePosition = 0.0;
         direction = Direction.FORWARD;
     }
 
-    public synchronized void setZeroPowerBehavior(ZeroPowerBehavior beh){ zeroPowerBehavior = beh; }
-    public synchronized ZeroPowerBehavior getZeroPowerBehavior() { return zeroPowerBehavior; }
+    public synchronized void setZeroPowerBehavior(ZeroPowerBehavior beh) {
+        zeroPowerBehavior = beh;
+    }
+
+    public synchronized ZeroPowerBehavior getZeroPowerBehavior() {
+        return zeroPowerBehavior;
+    }
 
 
     @Override
@@ -127,33 +141,35 @@ public class DeadWheelEncoder implements DcMotorEx {
 
     /**
      * Set desired velocity (in ticks per second)
-     * @param angularRate  the desired ticks per second
+     *
+     * @param angularRate the desired ticks per second
      */
     @Override
     public synchronized void setVelocity(double angularRate) {
-        setPower(angularRate/MOTOR_TYPE.MAX_TICKS_PER_SECOND);
+        setPower(angularRate / MOTOR_TYPE.MAX_TICKS_PER_SECOND);
     }
 
     /**
      * Set desired velocity in specified angular units
-     * @param angularRate   the desired angular rate, in units per second
-     * @param unit          the units in which angularRate is expressed
      *
+     * @param angularRate the desired angular rate, in units per second
+     * @param unit        the units in which angularRate is expressed
      */
     @Override
     public synchronized void setVelocity(double angularRate, AngleUnit unit) {
-        double unitsPerRotation = unit == AngleUnit.DEGREES? 360.0 : 2.0 * Math.PI;
+        double unitsPerRotation = unit == AngleUnit.DEGREES ? 360.0 : 2.0 * Math.PI;
         double ticksPerSecond = angularRate * MOTOR_TYPE.TICKS_PER_ROTATION / unitsPerRotation;
         setVelocity(ticksPerSecond);
     }
 
     /**
      * Get current velocity of motor in ticks per second
+     *
      * @return velocity in ticks per second
      */
     @Override
     public synchronized double getVelocity() {
-        return velocityRadiansPerSecond  * MOTOR_TYPE.TICKS_PER_ROTATION / (2.0 * Math.PI);
+        return velocityRadiansPerSecond * MOTOR_TYPE.TICKS_PER_ROTATION / (2.0 * Math.PI);
     }
 
     @Override
@@ -224,7 +240,7 @@ public class DeadWheelEncoder implements DcMotorEx {
     }
 
     @Override
-    public MotorConfigurationType getMotorType(){
+    public MotorConfigurationType getMotorType() {
         return MOTOR_CONFIGURATION_TYPE;
     }
 

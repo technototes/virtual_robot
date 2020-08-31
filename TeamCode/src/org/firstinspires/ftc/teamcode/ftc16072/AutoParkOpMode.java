@@ -1,12 +1,11 @@
 package org.firstinspires.ftc.teamcode.ftc16072;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
-import org.firstinspires.ftc.teamcode.ftc16072.Util.RobotPosition;
 
 import java.util.Arrays;
 import java.util.List;
+
 /**
  * Autonomous Parking OpMode contributed by ftc16072.
  * For red alliance: start with robot in square next to the blue depot, facing toward the building zone.

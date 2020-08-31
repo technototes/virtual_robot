@@ -71,15 +71,15 @@ package com.qualcomm.robotcore.hardware;
  * Such channels have a boolean state, and are modal as to direction, being either input
  * channels or output channels.
  */
-public interface DigitalChannel extends HardwareDevice
-{
+public interface DigitalChannel extends HardwareDevice {
     /**
      * Digital channel mode - input or output
      */
-    enum Mode { INPUT, OUTPUT }
+    enum Mode {INPUT, OUTPUT}
 
     /**
      * Returns whether the channel is in input or output mode
+     *
      * @return whether the channel is in input or output mode
      * @see #setMode(Mode)
      */
@@ -87,18 +87,21 @@ public interface DigitalChannel extends HardwareDevice
 
     /**
      * Changes whether the channel is in input or output mode
+     *
      * @param mode whether the channel is in input or output mode
      */
     void setMode(Mode mode);
 
     /**
      * Returns the current state of the channel
+     *
      * @return the current state of the channel
      */
     boolean getState();
 
     /**
      * Sets the current state of the channel
+     *
      * @param state the new state of the channel
      */
     void setState(boolean state);

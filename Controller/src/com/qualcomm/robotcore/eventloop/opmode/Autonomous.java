@@ -50,5 +50,6 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Autonomous {
     String name();
+
     String group() default "default";
 }

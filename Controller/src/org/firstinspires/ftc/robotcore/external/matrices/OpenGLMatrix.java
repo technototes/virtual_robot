@@ -118,7 +118,7 @@ public class OpenGLMatrix extends ColumnMajorMatrixF {
         float sin = (float) Math.sin(angle);
         for (int i = 0; i < 3; i++)
             for (int j = 0; j < 3; j++) {
-                int k = 4*j + i;
+                int k = 4 * j + i;
                 data[k] = dataV[i] * dataV[j] + (dataM[i] * dataM[j] + dataN[i] * dataN[j]) * cos
                         + (dataN[i] * dataM[j] - dataM[i] * dataN[j]) * sin;
             }
@@ -177,7 +177,9 @@ public class OpenGLMatrix extends ColumnMajorMatrixF {
     public void scale(float scaleX, float scaleY, float scaleZ) {
         OpenGLMatrix scaleMatrix = new OpenGLMatrix();
         float[] d = scaleMatrix.getData();
-        d[0] = scaleX;  d[5] = scaleY;  d[10] = scaleZ;
+        d[0] = scaleX;
+        d[5] = scaleY;
+        d[10] = scaleZ;
         this.multiply(scaleMatrix);
     }
 
@@ -190,7 +192,9 @@ public class OpenGLMatrix extends ColumnMajorMatrixF {
     public void translate(float dx, float dy, float dz) {
         OpenGLMatrix translateMatrix = new OpenGLMatrix();
         float[] d = translateMatrix.getData();
-        d[12] = dx;  d[13] = dy;  d[14] = dz;
+        d[12] = dx;
+        d[13] = dy;
+        d[14] = dz;
         this.multiply(translateMatrix);
     }
 
@@ -214,7 +218,9 @@ public class OpenGLMatrix extends ColumnMajorMatrixF {
     public OpenGLMatrix scaled(float scaleX, float scaleY, float scaleZ) {
         OpenGLMatrix scaleMatrix = new OpenGLMatrix();
         float[] d = scaleMatrix.getData();
-        d[0] = scaleX;  d[5] = scaleY;  d[10] = scaleZ;
+        d[0] = scaleX;
+        d[5] = scaleY;
+        d[10] = scaleZ;
         return this.multiplied(scaleMatrix);
     }
 
@@ -227,7 +233,9 @@ public class OpenGLMatrix extends ColumnMajorMatrixF {
     public OpenGLMatrix translated(float dx, float dy, float dz) {
         OpenGLMatrix translateMatrix = new OpenGLMatrix();
         float[] d = translateMatrix.getData();
-        d[12] = dx;  d[13] = dy;  d[14] = dz;
+        d[12] = dx;
+        d[13] = dy;
+        d[14] = dz;
         return this.multiplied(translateMatrix);
     }
 
@@ -252,7 +260,7 @@ public class OpenGLMatrix extends ColumnMajorMatrixF {
     public OpenGLMatrix inverted() {
         MatrixF invertedMatrixF = super.inverted();
         float[] d = new float[16];
-        for (int k=0; k<16; k++) d[k] = invertedMatrixF.get(k%4, k/4 );
+        for (int k = 0; k < 16; k++) d[k] = invertedMatrixF.get(k % 4, k / 4);
         return new OpenGLMatrix(d);
     }
 

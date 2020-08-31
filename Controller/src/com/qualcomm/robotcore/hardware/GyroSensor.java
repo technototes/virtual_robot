@@ -35,8 +35,6 @@ Modified by FTC Team Beta 8397 for use in the Virtual_Robot Simulator
 
 package com.qualcomm.robotcore.hardware;
 
-import com.qualcomm.robotcore.hardware.HardwareDevice;
-
 /**
  * Represents a simple Gyro Sensor.
  * The sensor must be initialized prior to use.
@@ -49,6 +47,7 @@ public interface GyroSensor extends HardwareDevice {
 
     /**
      * Get robot heading in degrees
+     *
      * @return robot heading (-180 to +180 degrees)
      */
     public double getHeading();
