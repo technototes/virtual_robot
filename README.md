@@ -1,6 +1,9 @@
 # Location of stuff
+
 robot library is in RoborLibrary module
+
 implementation code is in teamcode/newcode
+
 any question? dm me at 1198159#7727 on discord
 
 # INFO FROM FORKED PROJECT
