@@ -8,6 +8,17 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module" module-name="Controller" />
+    <orderEntry type="module-library">
+          <library>
+            <CLASSES>
+              <root url="jar://$MODULE_DIR$/../lib/Vuforia.jar!/" />
+            </CLASSES>
+            <JAVADOC />
+            <SOURCES />
+          </library>
+        </orderEntry>
     <orderEntry type="module" module-name="RobotLibrary" />
+        <orderEntry type="library" name="core-0.5.1" level="project" />
+
   </component>
 </module>

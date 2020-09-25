@@ -1,6 +1,7 @@
 package com.technototes.library.hardware.sensor;
 
 import com.qualcomm.robotcore.hardware.DigitalChannel;
+import com.technototes.library.logging.Log;
 
 public class DigitalSensor extends Sensor<DigitalChannel> {
     public DigitalSensor(DigitalChannel d) {
@@ -11,7 +12,7 @@ public class DigitalSensor extends Sensor<DigitalChannel> {
         super(s);
     }
 
-
+    @Log
     @Override
     public double getSensorValue() {
         return device.getState() ? 1 : 0;

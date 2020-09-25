@@ -1,6 +1,7 @@
 package com.technototes.library.hardware.servo;
 
 import com.technototes.library.hardware.HardwareDeviceGroup;
+import com.technototes.library.logging.Log;
 
 public class ServoGroup extends Servo implements HardwareDeviceGroup<Servo> {
     private Servo[] followers;
@@ -26,5 +27,10 @@ public class ServoGroup extends Servo implements HardwareDeviceGroup<Servo> {
             m[i] = followers[i - 1];
         }
         return m;
+    }
+    @Log
+    @Override
+    public double getSensorValue() {
+        return super.getSensorValue();
     }
 }

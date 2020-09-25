@@ -27,7 +27,6 @@ public class LiftUpCommand extends Command {
 
     @Override
     public void end() {
-        System.out.println(targetHeight);
         subsystem.setHeightValue(targetHeight);
         subsystem.lastPlacedBrickHeight = targetHeight;
     }

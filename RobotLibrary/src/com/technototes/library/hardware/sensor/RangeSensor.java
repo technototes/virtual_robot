@@ -1,5 +1,6 @@
 package com.technototes.library.hardware.sensor;
 
+import com.technototes.library.logging.Log;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
 public class RangeSensor extends Sensor<com.qualcomm.robotcore.hardware.DistanceSensor> {
@@ -14,7 +15,7 @@ public class RangeSensor extends Sensor<com.qualcomm.robotcore.hardware.Distance
         super(s);
     }
 
-
+    @Log
     @Override
     public double getSensorValue() {
         return device.getDistance(distanceUnit);

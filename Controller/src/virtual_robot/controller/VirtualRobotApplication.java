@@ -23,7 +23,7 @@ public class VirtualRobotApplication extends Application {
         controllerHandle = loader.getController();
         primaryStage.setTitle("Virtual Robot");
         primaryStage.setScene(new Scene(root));
-        primaryStage.setResizable(false);
+        primaryStage.setResizable(true);
         primaryStage.setOnShowing(new EventHandler<WindowEvent>() {
             @Override
             public void handle(WindowEvent event) {

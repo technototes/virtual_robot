@@ -2,6 +2,7 @@ package com.technototes.library.hardware.motor;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.technototes.library.hardware.HardwareDeviceGroup;
+import com.technototes.library.logging.Log;
 
 
 public class EncodedMotorGroup extends EncodedMotor<DcMotor> implements HardwareDeviceGroup<Motor> {
@@ -28,5 +29,10 @@ public class EncodedMotorGroup extends EncodedMotor<DcMotor> implements Hardware
             m[i] = followers[i - 1];
         }
         return m;
+    }
+    @Override
+    @Log
+    public double getSpeed() {
+        return super.getSpeed();
     }
 }

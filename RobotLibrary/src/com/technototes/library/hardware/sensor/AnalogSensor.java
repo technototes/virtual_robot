@@ -1,6 +1,7 @@
 package com.technototes.library.hardware.sensor;
 
 import com.qualcomm.robotcore.hardware.AnalogInput;
+import com.technototes.library.logging.Log;
 
 public class AnalogSensor extends Sensor<AnalogInput> {
 
@@ -14,6 +15,7 @@ public class AnalogSensor extends Sensor<AnalogInput> {
 
 
     @Override
+    @Log
     public double getSensorValue() {
         return device.getMaxVoltage();
     }

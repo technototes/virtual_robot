@@ -1,6 +1,7 @@
 package com.technototes.library.hardware.sensor;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
+import com.technototes.library.logging.Log;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
@@ -33,7 +34,7 @@ public class IMU extends Sensor<BNO055IMU> {
         return this;
     }
 
-
+    @Log
     @Override
     public double getSensorValue() {
         return gyroHeading();

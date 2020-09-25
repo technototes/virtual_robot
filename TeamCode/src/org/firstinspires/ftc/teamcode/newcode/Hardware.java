@@ -4,21 +4,25 @@ import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.sun.istack.internal.NotNull;
 import com.technototes.library.hardware.motor.EncodedMotor;
 import com.technototes.library.hardware.motor.Motor;
 import com.technototes.library.hardware.sensor.IMU;
 import com.technototes.library.hardware.sensor.RangeSensor;
 import com.technototes.library.hardware.servo.Servo;
+import com.technototes.library.logging.Log;
+import com.technototes.library.logging.Loggable;
 import com.technototes.library.structure.HardwareBase;
 
-
-public class Hardware extends HardwareBase {
+public class Hardware extends HardwareBase implements Loggable {
 
     public HardwareMap hardwareMap;
 
 
     //upper assembly
+    @Log(name = "slide")
     public Motor<CRServo> slide;
+    @Log(name = "slide")
     public Servo turn;
     public Servo claw;
 
@@ -53,6 +57,7 @@ public class Hardware extends HardwareBase {
         hardwareMap = map;
 
         slide = new Motor<CRServo>("slide");
+
         turn = new Servo("grabTurn");
         claw = new Servo("claw").setRange(0, 0.7);
 
@@ -69,6 +74,9 @@ public class Hardware extends HardwareBase {
 
         lLiftMotor = new EncodedMotor<DcMotor>("motorLiftLeft").setInverted(false);
         rLiftMotor = new EncodedMotor<DcMotor>("motorLiftRight").setInverted(true);
+
+        //lLiftMotor.setPIDValues(0.1, 0,0);
+        //rLiftMotor.setPIDValues(0.1, 0,0);
 
         flMotor = new Motor<DcMotor>("motorFrontLeft");
         frMotor = new Motor<DcMotor>("motorFrontRight");

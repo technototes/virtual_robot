@@ -1,32 +1,43 @@
 package com.technototes.library.hardware.motor;
 
+import com.acmerobotics.roadrunner.control.PIDCoefficients;
+import com.acmerobotics.roadrunner.control.PIDFController;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.technototes.library.hardware.HardwareDevice;
 import com.technototes.library.hardware.PID;
 import com.technototes.library.hardware.Sensored;
 import com.technototes.library.hardware.sensor.encoder.Encoder;
 import com.technototes.library.hardware.sensor.encoder.MotorEncoderSensor;
+import com.technototes.library.logging.Log;
 import com.technototes.library.util.PIDUtils;
 
 public class EncodedMotor<T extends DcMotor> extends Motor<T> implements Sensored, PID {
 
-    public double pid_p, pid_i, pid_d;
+    public PIDFController controller;
+    public PIDCoefficients coefficients;
     public double threshold = 50;
     private Encoder encoder;
 
     public EncodedMotor(T d) {
         super(d);
+        coefficients = new PIDCoefficients(0, 0, 0);
+        PIDFController controller = new PIDFController(coefficients, 0);
         encoder = new MotorEncoderSensor(d);
     }
 
     public EncodedMotor(HardwareDevice<T> m) {
         super(m.getDevice());
+        coefficients = new PIDCoefficients(0, 0, 0);
+        controller = new PIDFController(coefficients);
         encoder = new MotorEncoderSensor(device);
     }
 
     public EncodedMotor(String s) {
         super(s);
+        coefficients = new PIDCoefficients(0, 0, 0);
+        //controller = new PIDFController(coefficients);
         encoder = new MotorEncoderSensor(device);
     }
 
@@ -43,20 +54,17 @@ public class EncodedMotor<T extends DcMotor> extends Motor<T> implements Sensore
 
     @Override
     public void setPIDValues(double p, double i, double d) {
-        pid_p = p;
-        pid_i = i;
-        pid_d = d;
+        coefficients = new PIDCoefficients(p, i, d);
     }
 
     @Override
     public boolean setPositionPID(double val) {
-        if (!isAtPosition(val)) {
-            setSpeed(PIDUtils.calculatePIDDouble(pid_p, pid_i, pid_d, getSensorValue(), val));
-        } else {
-            setSpeed(0);
-            return true;
-        }
-        return false;
+        System.out.println("1");
+        controller.setTargetPosition(val);
+        System.out.println("2");
+        setSpeed(controller.update(encoder.getSensorValue()));
+        System.out.println("3");
+        return isAtPosition(val);
     }
 
     public boolean setPosition(double ticks) {
@@ -81,4 +89,9 @@ public class EncodedMotor<T extends DcMotor> extends Motor<T> implements Sensore
         encoder.zeroEncoder();
     }
 
+    @Override
+    @Log
+    public double getSpeed() {
+        return super.getSpeed();
+    }
 }

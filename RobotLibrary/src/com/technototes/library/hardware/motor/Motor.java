@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.util.Range;
 import com.technototes.library.hardware.Followable;
 import com.technototes.library.hardware.HardwareDevice;
 import com.technototes.library.hardware.Invertable;
+import com.technototes.library.logging.Log;
 import com.technototes.library.util.UnsupportedFeatureException;
 
 public class Motor<T extends DcMotorSimple> extends HardwareDevice<T> implements Invertable<Motor>, Followable<Motor> {
@@ -37,10 +38,12 @@ public class Motor<T extends DcMotorSimple> extends HardwareDevice<T> implements
         device.setPower(val * scale);
     }
 
+    @Log
     public double getSpeed() {
         return device.getPower();
     }
 
+    @Log
     public void setSpeed(double val) {
         device.setPower(Range.clip(val, -1, 1));
     }
@@ -57,5 +60,6 @@ public class Motor<T extends DcMotorSimple> extends HardwareDevice<T> implements
             throw new UnsupportedFeatureException("Idle behavior for CRServos", "in the SDK it does not exist");
         }
     }
+
 
 }
