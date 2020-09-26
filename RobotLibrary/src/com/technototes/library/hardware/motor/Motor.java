@@ -43,7 +43,6 @@ public class Motor<T extends DcMotorSimple> extends HardwareDevice<T> implements
         return device.getPower();
     }
 
-    @Log
     public void setSpeed(double val) {
         device.setPower(Range.clip(val, -1, 1));
     }
@@ -60,6 +59,5 @@ public class Motor<T extends DcMotorSimple> extends HardwareDevice<T> implements
             throw new UnsupportedFeatureException("Idle behavior for CRServos", "in the SDK it does not exist");
         }
     }
-
 
 }

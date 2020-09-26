@@ -20,10 +20,11 @@ public class Hardware extends HardwareBase implements Loggable {
 
 
     //upper assembly
-    @Log(name = "slide")
+    @Log.Number(name = "slide")
     public Motor<CRServo> slide;
-    @Log(name = "slide")
+    @Log.NumberBar(name = "turn", min = 0)
     public Servo turn;
+    @Log.NumberSlider(name = "claw", min = 0)
     public Servo claw;
 
     //capstone pusher
